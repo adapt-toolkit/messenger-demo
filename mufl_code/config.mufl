@@ -1,0 +1,15 @@
+config script
+{
+
+(
+$imports -> (
+    $libraries -> (config_load #$MUFL_STDLIB_PATH) $exports $libraries,
+    $applications -> (,)
+),
+$exports -> (
+    $libraries -> (,),
+    $applications -> (,)
+)
+
+).
+}
