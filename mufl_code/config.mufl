@@ -2,14 +2,12 @@ config script
 {
 
 (
-$imports -> (
-    $libraries -> (config_load #$MUFL_STDLIB_PATH) $exports $libraries,
-    $applications -> (,)
-),
+$imports -> ((config_load #$MUFL_STDLIB_PATH) $exports),
 $exports -> (
     $libraries -> (,),
     $applications -> (,)
 )
 
 ).
+
 }

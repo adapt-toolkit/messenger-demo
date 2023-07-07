@@ -1,0 +1,32 @@
+version: '3.8'
+
+x-service: &service
+  logging:
+    driver: json-file
+    options:
+      max-size: "100m"
+      max-file: "2"
+  restart: "no"
+  network_mode: "host"
+  #build: .
+  image: adapt-hello-world-example:latest
+  entrypoint: ["/bin/bash", "-c"]
+  #volumes:
+    #- ./:/mnt
+
+services:
+
+  broker:
+    <<: *service
+    command:
+    - >
+      node  /mufl/utilities/executables/dist/broker.js
+      --host 127.0.0.1 --port 9001 --test_mode --logger_config
+      --level DEBUG --print_callstack ERROR --logger_config_end
+
+  web:
+    <<: *service
+    command:
+    - >
+        cd /src/web && npm start
+
