@@ -18,7 +18,7 @@ curl -fsSL https://deb.nodesource.com/setup_current.x |bash - && \
 apt-get install -y nodejs 
 
 # Copy ADAPT Docker toolkit to our Docker image
-COPY --from=adaptframework/mufl:main /mufl /mufl
+COPY --from=adaptframework/mufl:sha-4a396e3 /mufl /mufl
 
 # Build ADAPT TypeScript modules
 RUN cd /mufl && sh build-nodejs-modules.sh

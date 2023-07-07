@@ -8,11 +8,8 @@ x-service: &service
       max-file: "2"
   restart: "no"
   network_mode: "host"
-  #build: .
   image: adapt-hello-world-example:latest
   entrypoint: ["/bin/bash", "-c"]
-  #volumes:
-    #- ./:/mnt
 
 services:
 
