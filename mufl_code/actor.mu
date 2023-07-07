@@ -1,4 +1,4 @@
-application user loads libraries
+application actor loads libraries
   identity_proof_document,
   attestation_document,
   browser_attestation_document,

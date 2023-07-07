@@ -22,8 +22,5 @@
   },
   "include": [
     "src"
-  ],
-  "references": [
-    {"path": "../../mufl/addon/addon_wrapper"}
   ]
 }
