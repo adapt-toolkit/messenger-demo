@@ -1,7 +1,8 @@
 application user loads libraries
   identity_proof_document,
   attestation_document,
-  browser_attestation_document
+  browser_attestation_document,
+  transaction_message_decoder
 uses transactions
 {
 

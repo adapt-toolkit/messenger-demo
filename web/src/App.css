@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* make container take up full viewport height */
+  gap: 10px; /* create space between elements */
+  text-align: center; /* center text horizontally */
+}
+
+.notification {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 10px;
+  color: black;
+  background-color: yellow;
+  text-align: center;
+}
+
+input {
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 300px;
+}
+
+button {
+  padding: 10px 20px;
+}
