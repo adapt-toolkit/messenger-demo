@@ -1,6 +1,6 @@
 ## Interactive Adapt hello world example
 
-[![Try in Codesandbox.io](https://img.shields.io/badge/Try%20in%20Codesandbox.io-blue)](https://github.com/adapt-toolkit/adapt-hello-world-example/main?file=/.codesandbox/README.md:1,1)
+[![Try in Codesandbox.io](https://img.shields.io/badge/Try%20in%20Codesandbox.io-blue)](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/main?file=/.codesandbox/README.md:1,1)
 
 Welcome to the interactive sandbox featuring the [ADAPT Framework](https://www.adaptframework.solutions/) interactive demo. You can find more information in [our documentation](https://docs.adaptframework.solutions/).
 
