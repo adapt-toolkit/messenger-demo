@@ -8,7 +8,8 @@ To experiment with code, you clone this repository to your [codesandbox](https:/
 
 Note: If you do not clone the repository, you will not be able to perform any of the aforementioned actions.
 
-The next important step: you should add `DOCKER_PASSWORD` secret into your fork according to [this guide](https://codesandbox.io/docs/learn/environment/secrets). For obtaining value for this secret you should contact us via form on [our site](https://www.adaptframework.solutions/) or just messaging to this email: [alex@adaptframework.solutions](mailto:alex@adaptframework.solutions&cc=vitalii@adaptframework.solutions&cc=filipp@adaptframework.solutions&body=<drop us a line about yourself please>?subject=Access to devkit)
+The next important step: you should add `DOCKER_PASSWORD` secret into your fork according to [this guide](https://codesandbox.io/docs/learn/environment/secrets). For obtaining value for this secret you should contact us via form on [our site](https://www.adaptframework.solutions/) or just messaging to this email: <a href="mailto:alex@adaptframework.solutions&cc=vitalii@adaptframework.solutions&cc=filipp@adaptframework.solutions&body=<drop us a line about yourself please>?subject=Access to devkit">alex@adaptframework.solutions</a>
+
 
 [Codesandbox](https://codesandbox.io) provides [Cloud Sandboxes](https://codesandbox.io/docs/learn/environment/vm) with the following specifications:
 - 2 vCPUs
