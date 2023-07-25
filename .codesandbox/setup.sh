@@ -1,4 +1,4 @@
-echo "$DOCKER_PASSWORD" | docker login --username adaptframework --password-stdin
+docker login --username adaptframework --password="$DOCKER_PASSWORD"
 
 id=$(docker create adaptframework/mufl:sha-4a396e3)
 docker cp $id:/mufl /mufl
