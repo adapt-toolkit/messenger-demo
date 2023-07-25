@@ -1,4 +1,4 @@
-[[ ! -z "$DOCKER_PASSWORD" ]] && docker login --username adaptframework --password="$DOCKER_PASSWORD"
+[ ! -z "$DOCKER_PASSWORD" ] && docker login --username adaptframework --password="$DOCKER_PASSWORD"
 
 if [ ! -d "/mufl" ]; then
     id=$(docker create adaptframework/mufl:sha-4a396e3)
