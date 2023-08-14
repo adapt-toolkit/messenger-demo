@@ -14,7 +14,7 @@ application actor loads libraries
         metadef member_t: global_id.
         metadef chat_t: ($chat_id -> global_id, $chat_name -> str, $members -> member_t(,)).
         metadef invite_t: ($chat_id -> global_id, $inviter -> global_id).
-        module callback_t { new_chat = $new_chat. invite_envelope = $invite_envelope. }
+        module callback_t { new_chat = $new_chat. invite_envelope = $invite_envelope. new_message = $new_message. }
 
         _read = grab( _read ).
 
@@ -143,7 +143,7 @@ application actor loads libraries
         sender_id = envelope $from. // envelope is of 'record' type, use reduction to extract the $from field
 
         return transaction::success [
-            transaction::action::return_data ($data -> (message $data), $sender_id -> sender_id, $chat_id -> (message $chat_id))
+            transaction::action::return_data ($data -> (message $data), $sender_id -> sender_id, $chat_id -> (message $chat_id), $type -> callback_t::new_message)
         ].
     }
 }
