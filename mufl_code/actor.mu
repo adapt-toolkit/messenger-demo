@@ -139,11 +139,12 @@ application actor loads libraries
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
     
         // extract the sender's packet ID from the transaction envelope
-        envelope = current_transaction_info::get_external_envelope_or_abort ().
+        envelope = current_transaction_info::get_external_envelope_or_abort().
         sender_id = envelope $from. // envelope is of 'record' type, use reduction to extract the $from field
+        timestamp = current_transaction_info::get_transaction_time().
 
         return transaction::success [
-            transaction::action::return_data ($data -> (message $data), $sender_id -> sender_id, $chat_id -> (message $chat_id), $type -> callback_t::new_message)
+            transaction::action::return_data ($message -> message, $sender_id -> sender_id, $timestamp -> timestamp, $type -> callback_t::new_message)
         ].
     }
 }
