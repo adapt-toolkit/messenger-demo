@@ -56,11 +56,24 @@
   margin-bottom: 10px;
 }
 
+.chat-timestamp {
+  font-size: 10px;
+  color: #888;
+  margin-right: 5px;
+  display: block;
+  text-align: right;
+}
+
 .chat-message {
   margin: 5px;
   padding: 10px;
   border-radius: 5px;
-  max-width: 70%;
+  max-width: 70%; /* Limit the width to prevent overlap */
+  position: relative; /* Add this line */
+}
+
+.chat-message.incoming .chat-timestamp {
+  text-align: left;
 }
 
 .chat-message.incoming {
@@ -101,42 +114,59 @@
 .chat-input button:hover {
   background-color: #45a049;
 }
-
 .chat-list {
-  margin-top: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fafafa;
+  max-width: 300px; /* Adjust as needed */
 }
 
 .chat-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background-color: #ffffff;
   padding: 10px;
-  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  margin: 5px 0;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 10px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .chat-item:hover {
   background-color: #f0f0f0;
 }
 
-.copy-invite-link-button {
+.chat-name {
+  font-weight: bold;
+  padding-right: 10px;
+  flex-grow: 1;
+}
+
+.chat-preview {
+  max-width: 60px; /* Set a maximum width for the preview */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #777;
+  font-size: 12px; /* Smaller font for preview */
+}
+
+.chat-preview .unread {
+  font-weight: bold;
+  color: #333;
+}
+
+.copy-invite-link {
+  background-color: #007bff;
+  color: white;
   border: none;
-  background-color: #2196f3;
-  color: #ffffff;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  margin-left: 15px; /* More space between button and preview */
 }
 
-.copy-invite-link-button:hover {
-  background-color: #1e88e5;
-}
-
-button {
-  cursor: pointer;
+.copy-invite-link:hover {
+  background-color: #0056b3;
 }

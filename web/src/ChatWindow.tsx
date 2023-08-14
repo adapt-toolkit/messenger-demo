@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface ChatWindowProps {
-    chat: { id: string; name: string; history: Array<{ text: string, incoming: boolean }> };
+    chat: { id: string; name: string; history: Array<{ text: string, incoming: boolean, timestamp: string }> };
     sendMessage: (message: string) => void;
 }
 
@@ -37,6 +37,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, sendMessage }) => {
                 ) : (
                     chat.history.map((message, index) => (
                         <div key={index} className={`chat-message ${message.incoming ? 'incoming' : 'outgoing'}`}>
+                            <span className="chat-timestamp">{message.timestamp}</span>
                             {message.text}
                         </div>
                     ))
