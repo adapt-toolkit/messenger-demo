@@ -7,18 +7,23 @@ application actor loads libraries
     uses transactions
 {
 
-    metadef message_t: ($data -> str, $chat_id -> global_id).
-    metadef member_t: ($member_id -> global_id, $key -> hash_code).
-    metadef chat_t: ($chat_id -> global_id, $members -> member_t(,)).
-    metadef invite_t: ($chat_id -> global_id, $inviter -> global_id).
 
     hidden
     {
-        chats is chat_t(,) = (,).
+        metadef message_t: ($data -> str, $chat_id -> global_id).
+        metadef member_t: global_id.
+        metadef chat_t: ($chat_id -> global_id, $chat_name -> str, $members -> member_t(,)).
+        metadef invite_t: ($chat_id -> global_id, $inviter -> global_id).
+        module callback_t { new_chat = $new_chat. invite_envelope = $invite_envelope. }
 
-        validate_chat_id = fn (chat_id: global_id)
+        _read = grab( _read ).
+
+        chats is (global_id ->> chat_t) = (,).
+
+        validate_chat_id = fn (chat_id: global_id) : chat_t
         {
-            abort "Chat not found wih chat_id [" + chat_id + "] for actor " + _get_container_id() + "!" when not chats chat_id.
+            chat = chats chat_id abort "Chat not found wih chat_id [" + chat_id + "] for actor " + _get_container_id() + "!" when is NIL.
+            return chat?.
         }
 
         validate_chat_not_registered = fn (chat_id: global_id)
@@ -31,22 +36,19 @@ application actor loads libraries
     //                 Chat creation
     // ---------------------------------------------
 
-    trn create_chat member_list: global_id(,)
+    trn create_chat _:($chat_name -> chat_name: str, $member_list -> member_list: member_t(,))
     {
         chat_id = _new_id "create new chat".
-        members is member_t(,) = (,).
-        scan member_list bind member do
-            // this is a placeholder for real cryptography
-            key = _new_id "Create a key".
-            members member -> key.
-        end
-        chat is chat_t(,) = ($chat_id -> chat_id, $members -> members).
+        chat = ($chat_id -> chat_id, $chat_name -> chat_name, $members -> member_list).
 
-        send_array is ?::transaction::action::send/product/product[] = [].
-        scan member_list bind member_id do
+        send_array is transaction::action::type[] = [].
+        sc member_list -- (member_id->)
+        {
             send_array (_count send_array|) -> transaction::action::send member_id
                 ($name -> "::actor::enter_chat", $targ -> chat).
-        end
+        }
+
+        send_array (_count send_array|) -> transaction::action::return_data ($chat -> chat, $type -> callback_t::new_chat).
         return transaction::success send_array.
     }
 
@@ -57,18 +59,17 @@ application actor loads libraries
     trn invite chat_id: global_id
     {
         requestor = current_transaction_info::get_external_envelope_or_abort() $from.
-        validate_chat_id chat_id.
+        chat = validate_chat_id chat_id.
 
-        send_array is ?::transaction::action::send/product/product[] = [].
-        scan chat chat_id $members bind member_id do
+        send_array is transaction::action::type[] = [].
+        sc chat $members -- (member_id->)
+        {
             send_array (_count send_array|) -> transaction::action::send member_id
                 ($name -> "::actor::add_member", $targ -> ($chat_id -> chat_id, $member_id -> requestor)).
-        end
+        }
 
-        return transaction::success [
-            send_array,
-            transaction::action::send requestor ($name -> "::actor::enter_chat", $targ -> chat)
-        ].
+        send_array (_count send_array|) -> transaction::action::send requestor ($name -> "::actor::enter_chat", $targ -> chat).
+        return transaction::success send_array.
     }
 
     trn add_member _:
@@ -76,25 +77,38 @@ application actor loads libraries
     {
         validate_chat_id chat_id.
         // this is a placeholder for real cryptography
-        key = _new_id "Create a key".
-        chats $chat_id $members member_id -> key.
-        return transaction::success 
+        //key = _new_id "Create a key".
+        chats chat_id $members member_id -> TRUE.
+        return transaction::success []
             // here might be a kety exchange logic []
         .
     }
 
+    // actually joining chat
     trn enter_chat chat: chat_t
     {
-        validate_chat_not_registered chat chat_id.
+        chat_id = chat $chat_id.
+        validate_chat_not_registered chat_id.
         chats chat_id -> chat.
-        return transaction::success.
+        return transaction::success [
+            transaction::action::return_data ($chat -> chat, $type -> callback_t::new_chat)
+        ].
     }
 
-    trn join_chat invite: invite_t
+    trn join_chat invite_link: bin
     {
+        invite = (_read invite_link) safe invite_t.
         return transaction::success [
-            transaction::action::send invite $inviter
-                ($name -> "::actor::invite", $targ -> invite $chat_id)
+            transaction::action::send (invite $inviter) ($name -> "::actor::invite", $targ -> invite $chat_id)
+        ].
+    }
+
+    trn ro generate_invite chat_id: global_id
+    {
+        validate_chat_id chat_id.
+        invite = _write ($chat_id -> chat_id, $inviter -> _get_container_id ()).
+        return transaction::success [
+            transaction::action::return_data ($invite -> invite, $type -> callback_t::invite_envelope)
         ].
     }
 
@@ -110,11 +124,12 @@ application actor loads libraries
         // extract recipient ids from the transaction argument
         members = chats (message $chat_id) $members.
 
-        send_array is ?::transaction::action::send/product/product[] = [].
-        scan members bind member_id do
+        send_array is transaction::action::type[] = [].
+        sc members -- (member_id->)
+        {
             send_array (_count send_array|) -> transaction::action::send member_id
                 ($name -> "::actor::receive_message", $targ -> message).
-        end
+        }
         return transaction::success send_array.
     }
     
@@ -126,9 +141,9 @@ application actor loads libraries
         // extract the sender's packet ID from the transaction envelope
         envelope = current_transaction_info::get_external_envelope_or_abort ().
         sender_id = envelope $from. // envelope is of 'record' type, use reduction to extract the $from field
-    
+
         return transaction::success [
-            transaction::action::return_data ("Received a message: " + (message $data) + ", from a packet: " + sender_id + ", chat id: " + (message $chat_id))
+            transaction::action::return_data ($data -> (message $data), $sender_id -> sender_id, $chat_id -> (message $chat_id))
         ].
     }
 }
