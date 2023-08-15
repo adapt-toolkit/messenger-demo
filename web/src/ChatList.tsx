@@ -1,22 +1,22 @@
 import React from 'react';
-import { copyToClipboard } from './utils';
 
 interface ChatListProps {
     chats: Array<{ id: string; name: string; history: Array<{ text: string, incoming: boolean }>; has_unread: boolean }>;
     setActiveChat: (chatIndex: number | null) => void;
+    generateInviteLink: (chat_id: string) => void;
 }
 
-const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat }) => {
+const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat, generateInviteLink }) => {
 
     const onCopyInviteLink = (chat_id: string) => {
-        copyToClipboard(`https://chatlink.com/${chat_id}`);
+        generateInviteLink(chat_id);
     }
 
     if (chats.length === 0) { return null }
 
     return (
         <div className="chat-list">
-            <h3>{chats.length > 0 && 'Existing Chats'}</h3>
+            <h3>{chats.length > 0 && `Existing Chats: ${chats.length}`}</h3>
             {chats.map((chat, index) => (
                 <div key={index} className="chat-item" onClick={() => setActiveChat(index)}>
                     <div className="chat-name">{chat.name}</div>

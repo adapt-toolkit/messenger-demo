@@ -68,8 +68,8 @@
   margin: 5px;
   padding: 10px;
   border-radius: 5px;
-  max-width: 70%; /* Limit the width to prevent overlap */
-  position: relative; /* Add this line */
+  max-width: 70%;
+  position: relative;
 }
 
 .chat-message.incoming .chat-timestamp {
@@ -119,7 +119,7 @@
   border-radius: 5px;
   padding: 10px;
   background-color: #fafafa;
-  max-width: 300px; /* Adjust as needed */
+  max-width: 300px;
 }
 
 .chat-item {
@@ -144,12 +144,12 @@
 }
 
 .chat-preview {
-  max-width: 60px; /* Set a maximum width for the preview */
+  max-width: 60px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   color: #777;
-  font-size: 12px; /* Smaller font for preview */
+  font-size: 12px;
 }
 
 .chat-preview .unread {
@@ -164,9 +164,66 @@
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 15px; /* More space between button and preview */
+  margin-left: 15px;
 }
 
 .copy-invite-link:hover {
   background-color: #0056b3;
 }
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #f3f3f3;
+  color: #333;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  margin: 20px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-left: 5px solid #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.chat-header {
+  background-color: #2c3e50;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #34495e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 0.5px; 
+}
+
+.chat-header .chat-name {
+  font-size: 26px;
+  margin-right: 16px;
+  color: #ecf0f1;
+  font-weight: 500;
+}
+
+.chat-header .chat-id {
+  font-size: 16px;
+  color: #95a5a6;
+  background: #34495e;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
