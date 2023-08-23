@@ -1,7 +1,5 @@
-[ ! -z "$DOCKER_PASSWORD" ] && docker login --username adaptframework --password="$DOCKER_PASSWORD"
-
 if [ ! -d "/mufl" ]; then
-    id=$(docker create adaptframework/mufl:sha-4a396e3)
+    id=$(docker create adaptframework/devkit:release-0.1)
     docker cp $id:/mufl /mufl
     docker rm -v $id
 fi

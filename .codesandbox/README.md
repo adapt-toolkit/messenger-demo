@@ -1,15 +1,12 @@
 ## Interactive Adapt hello world example
 
-[![Try in Codesandbox.io](https://img.shields.io/badge/Try%20in%20Codesandbox.io-blue)](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/main?file=/.codesandbox/README.md:1,1)
+[![Try in Codesandbox.io](https://img.shields.io/badge/Try%20in%20Codesandbox.io-blue)](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/adapt/messenger-old-syntax?file=/.codesandbox/README.md:1,1)
 
 Welcome to the interactive sandbox featuring the [ADAPT Framework](https://www.adaptframework.solutions/) interactive demo. You can find more information in [our documentation](https://docs.adaptframework.solutions/).
 
 To experiment with code, you should clone this repository to your [codesandbox](https://codesandbox.io) account by clicking "Create Branch" or "Fork" in the top right corner. This is necessary to access the preview window, open the terminal, and make changes to the code. 
 
 Note: If you do not clone the repository, you will not be able to perform any of the aforementioned actions.
-
-The next important step: you should add `DOCKER_PASSWORD` secret into your fork according to [this guide](https://codesandbox.io/docs/learn/environment/secrets). For obtaining value for this secret you should contact us via form on [our site](https://www.adaptframework.solutions/) or just messaging to this email: <a href="mailto:alex@adaptframework.solutions&cc=vitalii@adaptframework.solutions&cc=filipp@adaptframework.solutions&body=<drop us a line about yourself please>?subject=Access to devkit">alex@adaptframework.solutions</a>
-
 
 [Codesandbox](https://codesandbox.io) provides [Cloud Sandboxes](https://codesandbox.io/docs/learn/environment/vm) with the following specifications:
 - 2 vCPUs
