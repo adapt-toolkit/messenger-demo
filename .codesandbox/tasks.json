@@ -20,6 +20,11 @@
       "restartOn": {
         "files": ["mufl_code/*.mu"]
       }
+    },
+    "start-broker": {
+      "name": "Start Broker",
+      "runAtStart": true,
+      "command": "node /mufl/utilities/executables/dist/broker.js --host 127.0.0.1 --port 9001 --test_mode --logger_config --level DEBUG --print_callstack ERROR --logger_config_end",
     }
   }
 }
