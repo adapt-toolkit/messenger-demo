@@ -6,13 +6,13 @@ export module adapt_messenger_api {
 
     // hardcoded demo configuration
     const broker_address = "ws://127.0.0.1:9001"
-    const code_id = "719B828A9D382CC8456C773C09E902244DCC94F94A102B6193D2D3D1B061BC96" 
+    const code_id = "DC11CD1488BBAB536F65B1E68FFF0BE5D93EA623CC0D9510DD89BF56C1205656" 
     const test_mode = true;
 
     export class AdaptMessengerAPI {
 
         private __on_chat_created_cb?: (chat_id: string, chat_name: string) => void;
-        private __on_message_received_cb?: (chat_id: string, message: string, timestamp: string, incoming: boolean) => void;
+        private __on_message_received_cb?: (chat_id: string, message: string, timestamp: string, from: string, incoming: boolean) => void;
 
         constructor(public packet: adapt_wrappers.AdaptPacketWrapper) {
             packet.on_return_data = (data: adapt_js_api.AdaptValue) => {
@@ -37,7 +37,7 @@ export module adapt_messenger_api {
                         const sender_id = data.Reduce('sender_id');
                         const incoming = sender_id.Visualize() !== this.packet.packet.GetContainerID().Visualize();
 
-                        this.__on_message_received_cb(chat_id, message, timestamp, incoming);
+                        this.__on_message_received_cb(chat_id, message, timestamp, sender_id.Visualize(), incoming);
                     }
                 }
                 else {
@@ -48,14 +48,20 @@ export module adapt_messenger_api {
 
 
         send_message = (message: string, chat_id: string) => {
+            const timestamp = adapt_js_api.AdaptEnvironment.SystemTime(undefined);
             const trn = adapt_js_api_utils.object_to_adapt_value({
                 name: "::actor::send_message",
                 targ: {
-                    chat_id: chat_id,
-                    data: message
+                    message: {
+                        chat_id: chat_id,
+                        data: message
+                    },
+                    timestamp: timestamp
                 }
             }
             )
+
+            timestamp.Destroy();
 
             this.packet.add_client_message(trn);
         }
@@ -93,7 +99,7 @@ export module adapt_messenger_api {
             this.__on_chat_created_cb = on_chat_created_cb;
         }
 
-        set on_message_received(on_message_received_cb: (chat_id: string, message: string, timestamp: string, incoming: boolean) => void) {
+        set on_message_received(on_message_received_cb: (chat_id: string, message: string, timestamp: string, from: string, incoming: boolean) => void) {
             this.__on_message_received_cb = on_message_received_cb;
         }
 
@@ -101,8 +107,11 @@ export module adapt_messenger_api {
     }
 
     export const initialize = async (seed_phrase: string, on_initialized: (adapt_messenger_api: AdaptMessengerAPI) => void): Promise<void> => {
-        const wrapper = await adapt_wrapper_browser.start(`${test_mode ? "--test_mode" : ""} --broker_address ${broker_address} --logger_config --level ERROR --logger_config_end --packet --unit_hash ${code_id} --unit_dir_path /static/mufl/ --seed_phrase ${seed_phrase}`.split(' '))
+        const wrapper = await adapt_wrapper_browser.start(`${test_mode ? "--test_mode --broker_address" : "--broker_address"} ${broker_address} --logger_config --level ERROR --logger_config_end --packet --unit_hash ${code_id} --unit_dir_path /static/mufl/ --seed_phrase ${seed_phrase}`.split(' '))
 
+        const packet = adapt_js_api.AdaptEnvironment.EmptyPacket(undefined, false);
+        const result = packet.ExecuteFunction("_is_test_mode", [false]);
+        console.log("Running in test mode: ", result.Visualize());
         wrapper.on_packet_created_cb = (_, wrapper) => {
             on_initialized(new AdaptMessengerAPI(wrapper));
         }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface ChatWindowProps {
-    chat: { id: string; name: string; history: Array<{ text: string, incoming: boolean, timestamp: string }> };
+    chat: { id: string; name: string; history: Array<{ text: string, incoming: boolean, timestamp: string, from: string, color: string }> };
     sendMessage: (message: string) => void;
 }
 
@@ -18,7 +18,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, sendMessage }) => {
     };
     useEffect(() => {
         scrollToBottom();
-    }, [chat && chat.history]); // Re-run when the chat history changes
+    }, [chat.history]); // Re-run when the chat history changes
 
     const onSendClick = () => {
         if (message.trim() !== '') {
@@ -44,10 +44,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, sendMessage }) => {
                 {chat.history.length === 0 ? (
                     <div className="no-messages">No messages yet in this chat.</div>
                 ) : (
-                    chat.history.map((message, index) => (
-                        <div key={index} className={`chat-message ${message.incoming ? 'incoming' : 'outgoing'}`}>
-                            <span className="chat-timestamp">{message.timestamp}</span>
-                            {message.text}
+                    chat.history.map((messageDetails, index) => (
+                        <div key={index}
+                            className={`chat-message ${messageDetails.incoming ? 'incoming' : 'outgoing'}`}
+                            style={{ backgroundColor: messageDetails.incoming ? messageDetails.color : "#f0f0f0"}}>
+                            <span className="chat-timestamp">{messageDetails.timestamp}</span>
+                            <span className="chat-from">{messageDetails.from.substring(0, 5)}...</span>: {messageDetails.text}
                         </div>
                     ))
                 )}

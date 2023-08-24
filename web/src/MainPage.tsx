@@ -4,7 +4,7 @@ import ChatList from './ChatList';
 import { adapt_messenger_api } from './adapt_messenger_api'
 
 const MainPage: React.FC = () => {
-    const [chats, setChats] = useState<Array<{ name: string, id: string; history: Array<{ text: string, incoming: boolean, timestamp: string }>; has_unread: boolean }>>([]);
+    const [chats, setChats] = useState<Array<{ name: string, id: string; history: Array<{ text: string, incoming: boolean, timestamp: string, from: string, color: string }>; has_unread: boolean }>>([]);
     const [activeChat, setActiveChat] = useState<number | null>(null);
     const [adaptMessengerApi, setAdaptMessengerApi] = useState<adapt_messenger_api.AdaptMessengerAPI | undefined>(undefined)
 
@@ -40,13 +40,13 @@ const MainPage: React.FC = () => {
         }
     };
 
-    const receiveMessage = (chat_id: string, message: string, timestamp: string, incoming: boolean = true) => {
+    const receiveMessage = (chat_id: string, message: string, timestamp: string, from: string, incoming: boolean = true) => {
         console.log("Received a new messaeg: ", message);
 
         const updatedChats = [...chatsRef.current];
         for (let chat of updatedChats) {
             if (chat.id === chat_id) {
-                chat.history.push({ text: message, incoming: incoming, timestamp: timestamp });
+                chat.history.push({ text: message, incoming: incoming, timestamp: timestamp, from: from, color: generateColor(from) });
                 if (activeChatRef.current === null || chat.id !== updatedChats[activeChatRef.current]?.id) {
                     chat.has_unread = true;
                 }
@@ -56,6 +56,16 @@ const MainPage: React.FC = () => {
         setChats(updatedChats);
     };
 
+    const generateColor = (str: string) => {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+    
+        // Get a value between 50 and 200 to get a shade of blue
+        const value = (hash & 0xFF) % 150 + 50;  
+        return `rgb(${value}, ${value}, 255)`;  // Adjusting only the blue value
+    };
 
     // Use a ref to ensure the callback has the most recent `chats` and `activeChat` state
     const chatsRef = useRef(chats);
@@ -118,7 +128,7 @@ const MainPage: React.FC = () => {
         <div>
             <button className="create-chat-button" onClick={createNewChat}>Create a new chat</button>
             <button className="connect-chat-button" onClick={connectToChatViaLink}>Connect to a chat via link</button>
-            {activeChat !== null && <ChatWindow chat={chats[activeChat]} sendMessage={sendMessage} />}
+            {activeChat !== null && <ChatWindow key={chats[activeChat].history.length} chat={chats[activeChat]} sendMessage={sendMessage} />}
             <ChatList chats={chats} setActiveChat={setActiveChatProxy} generateInviteLink={generateInviteLink} />
         </div>
     );
