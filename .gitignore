@@ -1,0 +1,3 @@
+**/package-lock.json
+web/public/static/mufl/*.muflo
+web/public/static/wasm/**
