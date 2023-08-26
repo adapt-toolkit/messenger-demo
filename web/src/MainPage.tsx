@@ -21,16 +21,16 @@ const MainPage: React.FC = () => {
         setChats([...chatsRef.current, { name, id: chat_id, history: [], has_unread: false }]);
     };
 
-    const connectToChatViaLink = () => {
-        const link = prompt("Please enter the chat link:");
-        if (link) {
-            connectToChat(link);
+    const connectToChatViaCode = () => {
+        const cookie = prompt("Please enter the invite code:");
+        if (cookie) {
+            connectToChat(cookie);
         }
     };
 
-    const connectToChat = (link: string) => {
+    const connectToChat = (code: string) => {
         if (adaptMessengerApi) {
-            adaptMessengerApi.connect_to_chat(link);
+            adaptMessengerApi.connect_to_chat(code);
         }
     };
 
@@ -79,7 +79,7 @@ const MainPage: React.FC = () => {
     }, [activeChat]);
 
 
-    const generateInviteLink = (chat_id: string) => {
+    const generateInviteCode = (chat_id: string) => {
         if (adaptMessengerApi) {
             adaptMessengerApi.generate_invite(chat_id);
         }
@@ -127,9 +127,9 @@ const MainPage: React.FC = () => {
     return (
         <div>
             <button className="create-chat-button" onClick={createNewChat}>Create a new chat</button>
-            <button className="connect-chat-button" onClick={connectToChatViaLink}>Connect to a chat via link</button>
+            <button className="connect-chat-button" onClick={connectToChatViaCode}>Connect to a chat</button>
             {activeChat !== null && <ChatWindow key={chats[activeChat].history.length} chat={chats[activeChat]} sendMessage={sendMessage} />}
-            <ChatList chats={chats} setActiveChat={setActiveChatProxy} generateInviteLink={generateInviteLink} />
+            <ChatList chats={chats} setActiveChat={setActiveChatProxy} generateInviteCode={generateInviteCode} />
         </div>
     );
 };

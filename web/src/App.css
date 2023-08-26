@@ -161,7 +161,7 @@
   color: #333;
 }
 
-.copy-invite-link {
+.copy-invite-code {
   background-color: #007bff;
   color: white;
   border: none;
@@ -171,7 +171,7 @@
   margin-left: 15px;
 }
 
-.copy-invite-link:hover {
+.copy-invite-code:hover {
   background-color: #0056b3;
 }
 

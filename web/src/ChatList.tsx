@@ -3,13 +3,13 @@ import React from 'react';
 interface ChatListProps {
     chats: Array<{ id: string; name: string; history: Array<{ text: string, incoming: boolean }>; has_unread: boolean }>;
     setActiveChat: (chatIndex: number | null) => void;
-    generateInviteLink: (chat_id: string) => void;
+    generateInviteCode: (chat_id: string) => void;
 }
 
-const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat, generateInviteLink }) => {
+const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat, generateInviteCode: generateInviteCode }) => {
 
-    const onCopyInviteLink = (chat_id: string) => {
-        generateInviteLink(chat_id);
+    const onCopyInviteCode = (chat_id: string) => {
+        generateInviteCode(chat_id);
     }
 
     if (chats.length === 0) { return null }
@@ -30,13 +30,13 @@ const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat, generateInvit
                         )}
                     </div>
                     <button
-                        className="copy-invite-link"
+                        className="copy-invite-code"
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent triggering the chat item click
-                            onCopyInviteLink(chat.id);
+                            onCopyInviteCode(chat.id);
                         }}
                     >
-                        Copy invite link
+                        Copy invite code
                     </button>
                 </div>
             ))}

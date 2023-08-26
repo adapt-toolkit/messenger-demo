@@ -20,7 +20,7 @@ const DemoIntroPage: React.FC = () => {
                     ... [Continue your description here]
                 </p>
                 <h3>Give it a try</h3>
-                <button onClick={handleButtonClick}>Start Demo</button>
+                <button onClick={handleButtonClick}>Launch messenger</button>
             </div>
         </div>
     );
