@@ -4,6 +4,7 @@ import ChatList from './ChatList';
 import { adapt_messenger_api } from './adapt_messenger_api'
 
 const MainPage: React.FC = () => {
+    const default_broker_address = "ws://" + window.location.hostname + ":9001";
     const [chats, setChats] = useState<Array<{ name: string, id: string; history: Array<{ text: string, incoming: boolean, timestamp: string, from: string, color: string }>; has_unread: boolean }>>([]);
     const [activeChat, setActiveChat] = useState<number | null>(null);
     const [adaptMessengerApi, setAdaptMessengerApi] = useState<adapt_messenger_api.AdaptMessengerAPI | undefined>(undefined)
@@ -110,6 +111,9 @@ const MainPage: React.FC = () => {
         // This function is executed just once when the page is loaded.
         // We will initialize ADAPT and create a packet here.
 
+        // Get the broker address from the local browser storage
+        const brokerAddress = localStorage.getItem("brokerAddress") || default_broker_address;
+
         // Extract the current URL search parameters.
         const urlSearch = window.location.search;
         const urlParams = new URLSearchParams(urlSearch);
@@ -121,7 +125,7 @@ const MainPage: React.FC = () => {
             seed_phrase = "default seed phrase";
 
         // Initialize ADAPT
-        adapt_messenger_api.initialize(seed_phrase, (adapt_messenger_api => {
+        adapt_messenger_api.initialize(brokerAddress, seed_phrase, (adapt_messenger_api => {
             adapt_messenger_api.on_chat_created = __createNewChat;
             adapt_messenger_api.on_message_received = receiveMessage;
             adapt_messenger_api.on_set_user_name = onSetUserName;

@@ -5,7 +5,6 @@ import { copyToClipboard } from './utils';
 export module adapt_messenger_api {
 
     // hardcoded demo configuration
-    const broker_address = "ws://127.0.0.1:9001"
     const code_id = "5DFC54ED1002CCBE158FC14EBF349089057B955B7BEBB367DCBC92A5C4CDDE3B" 
     const test_mode = true;
 
@@ -125,7 +124,7 @@ export module adapt_messenger_api {
         
     }
 
-    export const initialize = async (seed_phrase: string, on_initialized: (adapt_messenger_api: AdaptMessengerAPI) => void): Promise<void> => {
+    export const initialize = async (broker_address: string, seed_phrase: string, on_initialized: (adapt_messenger_api: AdaptMessengerAPI) => void): Promise<void> => {
         const wrapper = await adapt_wrapper_browser.start(`${test_mode ? "--test_mode --broker_address" : "--broker_address"} ${broker_address} --logger_config --level DEBUG --logger_config_end --packet --unit_hash ${code_id} --unit_dir_path /static/mufl/ --seed_phrase ${seed_phrase}`.split(' '))
 
         const packet = adapt_js_api.AdaptEnvironment.EmptyPacket(undefined, false);
