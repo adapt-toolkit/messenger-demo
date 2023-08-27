@@ -6,13 +6,14 @@ export module adapt_messenger_api {
 
     // hardcoded demo configuration
     const broker_address = "ws://127.0.0.1:9001"
-    const code_id = "DC11CD1488BBAB536F65B1E68FFF0BE5D93EA623CC0D9510DD89BF56C1205656" 
+    const code_id = "5DFC54ED1002CCBE158FC14EBF349089057B955B7BEBB367DCBC92A5C4CDDE3B" 
     const test_mode = true;
 
     export class AdaptMessengerAPI {
 
         private __on_chat_created_cb?: (chat_id: string, chat_name: string) => void;
-        private __on_message_received_cb?: (chat_id: string, message: string, timestamp: string, from: string, incoming: boolean) => void;
+        private __on_message_received_cb?: (chat_id: string, message: string, timestamp: string, from_id: string, from_name: string, incoming: boolean) => void;
+        private __on_set_user_name_cb?: (user_name: string) => void;
 
         constructor(public packet: adapt_wrappers.AdaptPacketWrapper) {
             packet.on_return_data = (data: adapt_js_api.AdaptValue) => {
@@ -35,10 +36,16 @@ export module adapt_messenger_api {
                         const chat_id = data.Reduce('message').Reduce('chat_id').Visualize();
                         const timestamp = data.Reduce('timestamp').Visualize();
                         const sender_id = data.Reduce('sender_id');
+                        const sender_name = data.Reduce('sender_name');
                         const incoming = sender_id.Visualize() !== this.packet.packet.GetContainerID().Visualize();
 
-                        this.__on_message_received_cb(chat_id, message, timestamp, sender_id.Visualize(), incoming);
+                        this.__on_message_received_cb(chat_id, message, timestamp, sender_id.Visualize(), sender_name.Visualize(), incoming);
                     }
+                }
+                else if (type === 'set_user_name') {
+                    const user_name = data.Reduce('user_name').Visualize();
+                    if (this.__on_set_user_name_cb)
+                        this.__on_set_user_name_cb(user_name);                
                 }
                 else {
                     this.packet.logger.error("Unrecognized data returned from the transaction!");
@@ -99,15 +106,27 @@ export module adapt_messenger_api {
             this.__on_chat_created_cb = on_chat_created_cb;
         }
 
-        set on_message_received(on_message_received_cb: (chat_id: string, message: string, timestamp: string, from: string, incoming: boolean) => void) {
+        set on_message_received(on_message_received_cb: (chat_id: string, message: string, timestamp: string, from_id: string, from_name: string, incoming: boolean) => void) {
             this.__on_message_received_cb = on_message_received_cb;
         }
 
+        set on_set_user_name(on_set_user_name_cb: (user_name: string) => void) {
+            this.__on_set_user_name_cb = on_set_user_name_cb;
+        }
 
+        set_user_name = (user_name: string) => {
+            const trn = adapt_js_api_utils.object_to_adapt_value({
+                name: "::actor::set_user_name",
+                targ: user_name
+            });
+
+            this.packet.add_client_message(trn);
+        }
+        
     }
 
     export const initialize = async (seed_phrase: string, on_initialized: (adapt_messenger_api: AdaptMessengerAPI) => void): Promise<void> => {
-        const wrapper = await adapt_wrapper_browser.start(`${test_mode ? "--test_mode --broker_address" : "--broker_address"} ${broker_address} --logger_config --level ERROR --logger_config_end --packet --unit_hash ${code_id} --unit_dir_path /static/mufl/ --seed_phrase ${seed_phrase}`.split(' '))
+        const wrapper = await adapt_wrapper_browser.start(`${test_mode ? "--test_mode --broker_address" : "--broker_address"} ${broker_address} --logger_config --level DEBUG --logger_config_end --packet --unit_hash ${code_id} --unit_dir_path /static/mufl/ --seed_phrase ${seed_phrase}`.split(' '))
 
         const packet = adapt_js_api.AdaptEnvironment.EmptyPacket(undefined, false);
         const result = packet.ExecuteFunction("_is_test_mode", [false]);

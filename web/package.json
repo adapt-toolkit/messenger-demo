@@ -22,7 +22,7 @@
     "start": "PORT=8080 react-scripts start",
     "copy-protocol-packet": "mkdir -p ./public/static/mufl && cp ../../mufl/addon/addon_wrapper/mufl_files/*.muflo ./public/static/mufl/",
     "copy-wasm": "mkdir -p ./public/static/wasm/ && cp ../../mufl/addon/adapt_js_wasm/src/*.wasm ./public/static/wasm/",
-    "copy-muflo": "mkdir -p ./public/static/mufl && cp ../mufl_code/DC11CD1488BBAB536F65B1E68FFF0BE5D93EA623CC0D9510DD89BF56C1205656.muflo ./public/static/mufl/",
+    "copy-muflo": "mkdir -p ./public/static/mufl && cp ../mufl_code/5DFC54ED1002CCBE158FC14EBF349089057B955B7BEBB367DCBC92A5C4CDDE3B.muflo ./public/static/mufl/",
     "build": "tsc -b && npm run copy-wasm && npm run copy-muflo && npm run copy-protocol-packet && react-scripts build"
   },
   "eslintConfig": {

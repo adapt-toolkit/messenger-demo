@@ -49,7 +49,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, sendMessage }) => {
                             className={`chat-message ${messageDetails.incoming ? 'incoming' : 'outgoing'}`}
                             style={{ backgroundColor: messageDetails.incoming ? messageDetails.color : "#f0f0f0"}}>
                             <span className="chat-timestamp">{messageDetails.timestamp}</span>
-                            <span className="chat-from">{messageDetails.from.substring(0, 5)}...</span>: {messageDetails.text}
+                            <span className="chat-from">{messageDetails.from}</span>: {messageDetails.text}
                         </div>
                     ))
                 )}

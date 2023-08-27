@@ -7,6 +7,7 @@ const MainPage: React.FC = () => {
     const [chats, setChats] = useState<Array<{ name: string, id: string; history: Array<{ text: string, incoming: boolean, timestamp: string, from: string, color: string }>; has_unread: boolean }>>([]);
     const [activeChat, setActiveChat] = useState<number | null>(null);
     const [adaptMessengerApi, setAdaptMessengerApi] = useState<adapt_messenger_api.AdaptMessengerAPI | undefined>(undefined)
+    const [userName, setUserName] = useState<string>("");
 
     const createNewChat = () => {
         const name = prompt("Please enter the chat name:");
@@ -40,13 +41,13 @@ const MainPage: React.FC = () => {
         }
     };
 
-    const receiveMessage = (chat_id: string, message: string, timestamp: string, from: string, incoming: boolean = true) => {
+    const receiveMessage = (chat_id: string, message: string, timestamp: string, from_id: string, from_name: string, incoming: boolean = true) => {
         console.log("Received a new messaeg: ", message);
 
         const updatedChats = [...chatsRef.current];
         for (let chat of updatedChats) {
             if (chat.id === chat_id) {
-                chat.history.push({ text: message, incoming: incoming, timestamp: timestamp, from: from, color: generateColor(from) });
+                chat.history.push({ text: message, incoming: incoming, timestamp: timestamp, from: from_name, color: generateColor(from_id) });
                 if (activeChatRef.current === null || chat.id !== updatedChats[activeChatRef.current]?.id) {
                     chat.has_unread = true;
                 }
@@ -92,6 +93,10 @@ const MainPage: React.FC = () => {
         }
     }
 
+    const onSetUserName = (user_name: string) => {
+        setUserName(user_name);
+    }
+
     useEffect(() => {
         // This function is executed just once when the page is loaded.
         // We will initialize ADAPT and create a packet here.
@@ -110,7 +115,12 @@ const MainPage: React.FC = () => {
         adapt_messenger_api.initialize(seed_phrase, (adapt_messenger_api => {
             adapt_messenger_api.on_chat_created = __createNewChat;
             adapt_messenger_api.on_message_received = receiveMessage;
+            adapt_messenger_api.on_set_user_name = onSetUserName;
             setAdaptMessengerApi(adapt_messenger_api);
+            const user_name = prompt("Please enter your name:");
+            if (user_name) {
+                adapt_messenger_api.set_user_name(user_name);
+            }
         }))
     }, []);
 
@@ -126,6 +136,7 @@ const MainPage: React.FC = () => {
 
     return (
         <div>
+            <div className="username-display">Logged in as: {userName}</div>
             <button className="create-chat-button" onClick={createNewChat}>Create a new chat</button>
             <button className="connect-chat-button" onClick={connectToChatViaCode}>Connect to a chat</button>
             {activeChat !== null && <ChatWindow key={chats[activeChat].history.length} chat={chats[activeChat]} sendMessage={sendMessage} />}
