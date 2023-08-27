@@ -97,6 +97,15 @@ const MainPage: React.FC = () => {
         setUserName(user_name);
     }
 
+    const setUserNameFromPrompt = () => {
+        if (adaptMessengerApi) {
+            const name = prompt("Please enter your user name:");
+            if (name) {
+                adaptMessengerApi.set_user_name(name);
+            }
+        }
+    }
+
     useEffect(() => {
         // This function is executed just once when the page is loaded.
         // We will initialize ADAPT and create a packet here.
@@ -117,10 +126,6 @@ const MainPage: React.FC = () => {
             adapt_messenger_api.on_message_received = receiveMessage;
             adapt_messenger_api.on_set_user_name = onSetUserName;
             setAdaptMessengerApi(adapt_messenger_api);
-            const user_name = prompt("Please enter your name:");
-            if (user_name) {
-                adapt_messenger_api.set_user_name(user_name);
-            }
         }))
     }, []);
 
@@ -132,6 +137,14 @@ const MainPage: React.FC = () => {
                 <h3>Loading ADAPT framework...</h3>
             </div>
         );
+    }
+
+    if (userName === '') {
+        return (
+            <div>
+                <button className="set-username-button" onClick={setUserNameFromPrompt}>Set user name</button>
+            </div>
+        )
     }
 
     return (
