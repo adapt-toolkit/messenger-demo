@@ -1,4 +1,4 @@
-## **ADAPT Messenger Demo Overview**
+# ADAPT Messenger Demo
 
 The ADAPT team is proud to present a decentralized messenger demo featuring end-to-end message encryption. This repository demonstrates how messages can be broadcast securely, with each recipient in a group chat receiving a uniquely encrypted message, all achieved with just a few lines of MUFL code. 
 
@@ -6,10 +6,26 @@ While the messenger application is the centerpiece, the true essence lies in hig
 
 Navigate through the sections for an in-depth look:
 
+0. [About ADAPT Framework](#about-adapt-framework)
 1. [Messenger Architecture](#messenger-architecture)
 2. [Code Structure](#code-structure)
 3. [How to Build](#how-to-build)
 4. [ADAPT Architecture](#adapt-architecture)
+
+### **About ADAPT Framework**
+
+The ADAPT Framework redefines the realm of internet applications by introducing a mesh of interconnected data nodes, ensuring end-to-end encryption, and pioneering the concept of Technologically-assured trust (TAT). Eliminating the reliance on system operators for superuser-type administration, TAT is indispensable for applications handling sensitive, critical, or proprietary data. Our mission is to offer a robust solution where existing development tools fall short, thereby fostering a modern approach to building both consumer and enterprise internet applications.
+
+The MUFL Programming Language is a cornerstone of ADAPT. Designed for the efficient implementation of ADAPT packet state transitions, MUFL, much like renowned scripting languages, brings forth a functional paradigm, ensuring the creation of new packet states without compromising the integrity of the previous states. It empowers you as a programmer to implement the business logic of a distributed application painlessly, and effectively.
+
+You can find more information in our documentation:
+- **General:** [ADAPT Framework Documentation](https://docs.adaptframework.solutions/)
+- **MUFL Overview:** [Detailed MUFL Documentation](https://docs.adaptframework.solutions/basic-syntax.html)
+- **Beginner's Guide:** [ADAPT Tutorial](https://docs.adaptframework.solutions/detailed-build-example.html)
+
+You can also find whitepaper, information about our team and other information on [our main site](https://www.adaptframework.solutions/).
+
+Feel free to join our [discord server](https://discord.gg/VjKSBS2u7H) and ask all your questions! With love, ADAPT team <3
 
 ### **Messenger Architecture**
 
