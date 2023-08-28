@@ -61,7 +61,7 @@ For a more exhaustive understanding of ADAPT, MUFL, and this demo, consult our [
 To get the ADAPT messenger demo up and running, first, construct a Docker image. Then, use the docker-compose utility to initiate the containers.
 
 ```bash
-docker build . -t adapt-messenger:latest # build docker image
+docker build . -t messenger-demo # build docker image
 
 docker-compose up -d # run docker containers
 
