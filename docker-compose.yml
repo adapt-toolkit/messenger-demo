@@ -8,7 +8,7 @@ x-service: &service
       max-file: "2"
   restart: "no"
   network_mode: "host"
-  image: adapt-hello-world-example:latest
+  image: messenger-demo
   entrypoint: ["/bin/bash", "-c"]
 
 services:

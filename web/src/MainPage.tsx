@@ -124,8 +124,15 @@ const MainPage: React.FC = () => {
         if (!seed_phrase)
             seed_phrase = "default seed phrase";
 
+        const code_id = process.env.REACT_APP_MUFLO_CODE_HASH;
+        
+        if (!code_id) {
+            window.alert("Failed to obtain code id!");
+            return;
+        }
+
         // Initialize ADAPT
-        adapt_messenger_api.initialize(brokerAddress, seed_phrase, (adapt_messenger_api => {
+        adapt_messenger_api.initialize(brokerAddress, code_id, seed_phrase, (adapt_messenger_api => {
             adapt_messenger_api.on_chat_created = __createNewChat;
             adapt_messenger_api.on_message_received = receiveMessage;
             adapt_messenger_api.on_set_user_name = onSetUserName;
