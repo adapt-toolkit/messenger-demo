@@ -7,7 +7,6 @@ x-service: &service
       max-size: "100m"
       max-file: "2"
   restart: "no"
-  network_mode: "host"
   image: messenger-demo
   entrypoint: ["/bin/bash", "-c"]
 
@@ -15,15 +14,19 @@ services:
 
   broker:
     <<: *service
+    ports:
+      - "9001:9001"
     command:
-    - >
-      node  /mufl/utilities/executables/dist/broker.js
-      --host 127.0.0.1 --port 9001 --test_mode --logger_config
-      --level DEBUG --print_callstack ERROR --logger_config_end
+      - >
+        node  /mufl/utilities/executables/dist/broker.js
+        --host 127.0.0.1 --port 9001 --test_mode --logger_config
+        --level DEBUG --print_callstack ERROR --logger_config_end
 
   web:
     <<: *service
+    ports:
+      - "8080:8080"
     command:
-    - >
-        cd /src/web && npm start
+      - >
+          cd /src/web && npm start
 

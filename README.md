@@ -84,6 +84,12 @@ docker-compose up -d # run docker containers
 open http://localhost:8080 # open a browser tab
 ```
 
+To build the docker image on Apple Silicon, you need to use the following command:
+
+```bash
+docker build . -t messenger-demo --platform linux/amd64
+```
+
 To shut down the demo, execute:
 
 ```
