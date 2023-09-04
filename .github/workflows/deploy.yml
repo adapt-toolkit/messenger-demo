@@ -83,8 +83,7 @@ jobs:
           done
           cat report.txt
           cp report.txt build/report.txt
-          mv scripts/__test_run ./
-          zip -r -9 report.zip build public __test_run
+          zip -r -9 report.zip build
         if: ${{ always() }}
 
       - name: Send report
@@ -98,6 +97,7 @@ jobs:
             echo -e "\n================" >> report.txt
             echo "Something went wrong with CI =(" >> report.txt
             echo "Check it manually please" >> report.txt
+            zip -r -9 report.zip report.txt
           fi
 
           curl -s -X POST  -d "chat_id=-1001205284972" -d "parse_mode=HTML" --data-urlencode "text=<pre>$(cat report.txt)</pre>"  \
