@@ -6,7 +6,7 @@ x-service: &service
     options:
       max-size: "100m"
       max-file: "2"
-  restart: "no"
+  restart: yes
   image: messenger-demo
   entrypoint: ["/bin/bash", "-c"]
 
@@ -19,7 +19,7 @@ services:
     command:
       - >
         node  /mufl/utilities/executables/dist/broker.js
-        --host 127.0.0.1 --port 9001 --test_mode --logger_config
+        --host 0.0.0.0 --port 9001 --test_mode --logger_config
         --level DEBUG --print_callstack ERROR --logger_config_end
 
   web:

@@ -1,0 +1,108 @@
+name: Deploy Messenger Demo to AWS
+
+on:
+  push:
+    branches:
+      - release-0.1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    name: Build and Deploy
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rsync
+
+      - name: Copy code to our server
+        shell: bash
+        env:
+            SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+          echo "$(git log --format=%B -n 1 ${GITHUB_SHA})" >> COMMIT
+          echo "Event: $GITHUB_EVENT_NAME by $GITHUB_ACTOR" >> COMMIT
+          echo "Ref: $(git rev-parse --short HEAD) in $GITHUB_REF_NAME" >> COMMIT
+          rsync -azP --delete -e "ssh -o StrictHostKeyChecking=no" ./ root@ec2-54-196-81-97.compute-1.amazonaws.com:/opt/demo-messenger
+          ssh -o StrictHostKeyChecking=no root@ec2-54-196-81-97.compute-1.amazonaws.com bash -c 'cd /opt/demo-messenger && docker build . -t messenger-demo && docker-compose up -d'
+
+      - name: Save job status
+        if: always()
+        run: |
+          mkdir -p build
+          echo -e "\n[${{ job.status }}] Build job" > build/build.status
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts-deploy-${{github.sha}}
+          path: |
+            build
+          retention-days: 1
+
+  telegram:
+    name: Telegram pager
+    needs:
+      - deploy
+    if: ${{ always() }}
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+
+      - name: Download results of build
+        uses: actions/download-artifact@v3
+        with:
+          name: artifacts-deploy-${{github.sha}}
+          path: ./build
+        if: ${{ always() }}
+        continue-on-error: true
+
+      - name: Collect report
+        shell: bash
+        run: |
+          echo "$(git log --format=%B -n 1 ${GITHUB_SHA})" >> report.txt
+          echo "Event: $GITHUB_EVENT_NAME by $GITHUB_ACTOR" >> report.txt
+          echo "Ref: $(git rev-parse --short HEAD) in $GITHUB_REF_NAME" >> report.txt
+          echo -e "\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> report.txt
+          echo -e "\n================" >> report.txt
+          for filename in build/*.status; do
+            if [ -f "$filename" ]; then
+              cat $filename >> report.txt
+            fi
+          done
+          cat report.txt
+          cp report.txt build/report.txt
+          mv scripts/__test_run ./
+          zip -r -9 report.zip build public __test_run
+        if: ${{ always() }}
+
+      - name: Send report
+        shell: bash
+        run: |
+          if [ ! -f report.txt ]; then
+            echo "Event: $GITHUB_EVENT_NAME by $GITHUB_ACTOR" >> report.txt
+            echo "Ref: $(git rev-parse --short HEAD) in $GITHUB_REF_NAME" >> report.txt
+            echo "Message: $(git log --format=%B -n 1 ${{ github.sha }})" >> report.txt
+            echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> report.txt
+            echo -e "\n================" >> report.txt
+            echo "Something went wrong with CI =(" >> report.txt
+            echo "Check it manually please" >> report.txt
+          fi
+
+          curl -s -X POST  -d "chat_id=-1001205284972" -d "parse_mode=HTML" --data-urlencode "text=<pre>$(cat report.txt)</pre>"  \
+          ${{ secrets.telegram_bot1197001007 }}/sendMessage
+
+          curl -F chat_id="-1001205284972" -F document=@"report.zip"   \
+          ${{ secrets.telegram_bot1197001007 }}/sendDocument
+        if: ${{ always() }}
