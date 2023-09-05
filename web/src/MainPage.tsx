@@ -4,7 +4,6 @@ import ChatList from './ChatList';
 import { adapt_messenger_api } from './adapt_messenger_api'
 
 const MainPage: React.FC = () => {
-    const default_broker_address = "ws://" + window.location.hostname + ":9001";
     const [chats, setChats] = useState<Array<{ name: string, id: string; history: Array<{ text: string, incoming: boolean, timestamp: string, from: string, color: string }>; has_unread: boolean }>>([]);
     const [activeChat, setActiveChat] = useState<number | null>(null);
     const [adaptMessengerApi, setAdaptMessengerApi] = useState<adapt_messenger_api.AdaptMessengerAPI | undefined>(undefined)
