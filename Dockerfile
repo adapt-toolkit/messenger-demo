@@ -2,6 +2,10 @@ FROM ubuntu:20.04
 
 LABEL description="ADAPT hello world project example" maintainer="vitalii@adaptframework.solutions"
 
+ARG broker_address="ws://localhost:9001"
+
+ENV __BROKER_ADDRESS__=${broker_address}
+
 USER root
 WORKDIR /
 ENV TZ UTC

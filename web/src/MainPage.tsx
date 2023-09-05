@@ -112,7 +112,12 @@ const MainPage: React.FC = () => {
         // We will initialize ADAPT and create a packet here.
 
         // Get the broker address from the local browser storage
-        const brokerAddress = localStorage.getItem("brokerAddress") || default_broker_address;
+        const brokerAddress = process.env.REACT_APP_BROKER_ADDRESS;
+
+        if (!brokerAddress) {
+            window.alert("Failed to obtain code id!");
+            return;
+        }
 
         // Extract the current URL search parameters.
         const urlSearch = window.location.search;
