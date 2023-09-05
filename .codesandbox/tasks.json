@@ -20,16 +20,6 @@
       "restartOn": {
         "files": ["mufl_code/*.mu"]
       }
-    },
-    "start-broker": {
-      "name": "Start Broker",
-      "runAtStart": true,
-      "command": "node /mufl/utilities/executables/dist/broker.js --host 0.0.0.0 --port 9001 --test_mode --logger_config --level DEBUG --print_callstack ERROR --logger_config_end"
-    },
-    "debug": {
-      "name": "Debug",
-      "runAtStart": true,
-      "command": "hostname; hostname -i; curl ifconfig.me; cat /etc/hosts; curl -v https://messenger-demo.adaptframework.solutions/broker"
     }
   }
 }
