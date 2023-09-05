@@ -4,7 +4,7 @@
   "tasks": {
     "rebuild-nodejs": {
       "name": "Rebuild app on changes",
-      "command": "cd /workspace/web && export __BROKER_ADDRESS__="wss://messenger-demo.adaptframework.solutions/broker" && npm run build && npm run start",
+      "command": "cd /workspace/web && export __BROKER_ADDRESS__='wss://messenger-demo.adaptframework.solutions/broker' && npm run build && npm run start",
       "restartOn": {
         "files": ["web/src/**/*"]
       },
