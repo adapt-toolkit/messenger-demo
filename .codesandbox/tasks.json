@@ -4,7 +4,7 @@
   "tasks": {
     "rebuild-nodejs": {
       "name": "Rebuild app on changes",
-      "command": "cd /workspace/web && npm run build && npm run start",
+      "command": "cd /workspace/web && export __BROKER_ADDRESS__='wss://messenger-demo.adaptframework.solutions/broker' && npm run build && npm run start",
       "restartOn": {
         "files": ["web/src/**/*"]
       },
@@ -20,11 +20,6 @@
       "restartOn": {
         "files": ["mufl_code/*.mu"]
       }
-    },
-    "start-broker": {
-      "name": "Start Broker",
-      "runAtStart": true,
-      "command": "node /mufl/utilities/executables/dist/broker.js --host 0.0.0.0 --port 9001 --test_mode --logger_config --level DEBUG --print_callstack ERROR --logger_config_end",
     }
   }
 }
