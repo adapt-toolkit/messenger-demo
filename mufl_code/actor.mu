@@ -210,7 +210,7 @@ application actor loads libraries
         invite = create_invite chat_id.
         
         return transaction::success [
-            transaction::action::return_data ($invite -> (_write invite), $type -> callback_t::invite_envelope)
+            transaction::action::return_data ($chat_id -> chat_id, $invite -> (_write invite), $type -> callback_t::invite_envelope)
         ].
     }
 

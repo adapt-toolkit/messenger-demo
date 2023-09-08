@@ -11,6 +11,7 @@ export module adapt_messenger_api {
         private __on_chat_created_cb?: (chat_id: string, chat_name: string) => void;
         private __on_message_received_cb?: (chat_id: string, message: string, timestamp: string, from_id: string, from_name: string, incoming: boolean) => void;
         private __on_set_user_name_cb?: (user_name: string) => void;
+        private __on_invite_code_generated?: (chat_id: string, invite: string) => void;
 
         constructor(public packet: adapt_wrappers.AdaptPacketWrapper) {
             packet.on_return_data = (data: adapt_js_api.AdaptValue) => {
@@ -25,7 +26,11 @@ export module adapt_messenger_api {
                 }
                 else if (type === 'invite_envelope') {
                     const invite = data.Reduce('invite').GetBinary().toString('hex');
-                    copyToClipboard(invite);   
+                    const chat_id = data.Reduce('chat_id').Visualize();
+                    if (this.__on_invite_code_generated) {
+                        this.__on_invite_code_generated(chat_id, invite);
+                    }
+                    // copyToClipboard(invite);   
                 }
                 else if (type === 'new_message') {
                     if (this.__on_message_received_cb) {
@@ -109,6 +114,10 @@ export module adapt_messenger_api {
 
         set on_set_user_name(on_set_user_name_cb: (user_name: string) => void) {
             this.__on_set_user_name_cb = on_set_user_name_cb;
+        }
+
+        set on_invite_code_generated(on_invite_code_generated: (chat_id: string, invite: string) => void) {
+            this.__on_invite_code_generated = on_invite_code_generated;
         }
 
         set_user_name = (user_name: string) => {

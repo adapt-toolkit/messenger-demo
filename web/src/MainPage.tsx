@@ -8,6 +8,7 @@ const MainPage: React.FC = () => {
     const [activeChat, setActiveChat] = useState<number | null>(null);
     const [adaptMessengerApi, setAdaptMessengerApi] = useState<adapt_messenger_api.AdaptMessengerAPI | undefined>(undefined)
     const [userName, setUserName] = useState<string>("");
+    const [copiedInviteCodeChatId, setCopiedInviteCodeChatId] = useState<string | null>(null);
 
     const createNewChat = () => {
         const name = prompt("Please enter the chat name:");
@@ -86,6 +87,16 @@ const MainPage: React.FC = () => {
         }
     }
 
+    const onInviteCodeGenerated = async (chat_id: string, invite: string) => {
+        setCopiedInviteCodeChatId(chat_id);
+        try {
+            await navigator.clipboard.writeText(invite);
+            setTimeout(() => setCopiedInviteCodeChatId(null), 2000); // Reset after 2 seconds
+        } catch (err) {
+            console.error('Failed to copy invite code', err);
+        }
+    }
+
     const setActiveChatProxy = (index: number | null) => {
         setActiveChat(index);
         if (index !== null) {
@@ -140,6 +151,7 @@ const MainPage: React.FC = () => {
             adapt_messenger_api.on_chat_created = __createNewChat;
             adapt_messenger_api.on_message_received = receiveMessage;
             adapt_messenger_api.on_set_user_name = onSetUserName;
+            adapt_messenger_api.on_invite_code_generated = onInviteCodeGenerated;
             setAdaptMessengerApi(adapt_messenger_api);
         }))
     }, []);
@@ -168,7 +180,7 @@ const MainPage: React.FC = () => {
             <button className="create-chat-button" onClick={createNewChat}>Create a new chat</button>
             <button className="connect-chat-button" onClick={connectToChatViaCode}>Connect to a chat</button>
             {activeChat !== null && <ChatWindow key={chats[activeChat].history.length} chat={chats[activeChat]} sendMessage={sendMessage} />}
-            <ChatList chats={chats} setActiveChat={setActiveChatProxy} generateInviteCode={generateInviteCode} />
+            <ChatList chats={chats} setActiveChat={setActiveChatProxy} generateInviteCode={generateInviteCode} copiedInviteCodeChatId={copiedInviteCodeChatId} />
         </div>
     );
 };

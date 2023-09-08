@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface ChatListProps {
     chats: Array<{ id: string; name: string; history: Array<{ text: string, incoming: boolean }>; has_unread: boolean }>;
     setActiveChat: (chatIndex: number | null) => void;
     generateInviteCode: (chat_id: string) => void;
+    copiedInviteCodeChatId: string | null;
 }
 
-const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat, generateInviteCode: generateInviteCode }) => {
+const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat, generateInviteCode, copiedInviteCodeChatId }) => {
 
-    const onCopyInviteCode = (chat_id: string) => {
+
+    const onCopyInviteCode = async (chat_id: string) => {
         generateInviteCode(chat_id);
     }
 
@@ -36,7 +38,7 @@ const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat, generateInvit
                             onCopyInviteCode(chat.id);
                         }}
                     >
-                        Copy invite code
+                        {(copiedInviteCodeChatId !== null && copiedInviteCodeChatId === chat.id) ? 'Copied' : 'Copy invite code'}
                     </button>
                 </div>
             ))}
@@ -45,4 +47,3 @@ const ChatList: React.FC<ChatListProps> = ({ chats, setActiveChat, generateInvit
 };
 
 export default ChatList;
-
