@@ -15,7 +15,7 @@ application actor loads libraries
 
     hidden
     {
-        metadef message_t: ($data -> str, $chat_id -> global_id).
+        metadef message_t: ($data -> str, $chat_id -> global_id, $timestamp -> time).
         metadef member_t: ($name -> str, $address_document -> address_document_types::t_address_document).
         metadef contacts_t: (global_id ->> member_t).
         metadef chat_t: ($chat_id -> global_id, $chat_name -> str, $members -> global_id(,)).
@@ -31,11 +31,10 @@ application actor loads libraries
         _read = grab( _read ).
         key_storage::init ($_read -> _read).
 
-
         user_name is str = "".
-        chats   is (global_id ->> chat_t)   = (,).
-        contacts is contacts_t = (,).
-        invites is (global_id ->> ($secret_key -> secretkey_encrypt, $chat_id -> global_id)) = (,).
+        chats     is (global_id ->> chat_t)   = (,).
+        contacts  is contacts_t = (,).
+        invites   is (global_id ->> ($secret_key -> secretkey_encrypt, $chat_id -> global_id)) = (,).
 
         fn validate_chat_id (chat_id: global_id) -> chat_t
         {
@@ -102,7 +101,48 @@ application actor loads libraries
     //                 Invitations
     // ---------------------------------------------
 
-    trn invite _: ($invite_id -> invite_id: global_id, $docs -> member_document_encrypted: crypto_message, $invitee_key -> signing_key: publickey_encrypt)
+    trn generate_invite chat_id: global_id
+    {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
+
+        validate_chat_id chat_id.
+
+        invite = create_invite chat_id.
+        
+        return transaction::success [
+            transaction::action::return_data ($chat_id -> chat_id, $invite -> (_write invite), $type -> callback_t::invite_envelope)
+        ].
+    }
+
+    trn join_chat invite_link: bin
+    {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
+
+        invite = (_read invite_link) safe invite_t.
+        my_document = get_my_address_document().
+        process_address_document (invite $inviter) TRUE. 
+
+        // generate cryptographic keys to encrypt the invite message
+        crypto_scheme = _crypto_default_scheme_id(). 
+        keypair = _crypto_construct_encryption_keypair crypto_scheme.
+
+        // encrypt the invitation letter
+        encryption_key = invite $key.
+        invite_id = invite $id.
+        encrypted_message = _crypto_encrypt_message (keypair $secret_key) encryption_key (_write ($address_document -> my_document, $name -> user_name)).
+
+        return transaction::success [
+            transaction::action::send (invite $inviter $identity $container_id)
+                ($name -> "::actor::invite", $targ -> 
+                    ($invite_id -> invite_id, $docs -> encrypted_message, $invitee_key -> (keypair $public_key)))
+        ].
+    }
+
+    trn invite _:(
+        $invite_id -> invite_id: global_id,
+        $docs -> member_document_encrypted: crypto_message,
+        $invitee_key -> signing_key: publickey_encrypt
+    )
     {
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
         // get the invite cryptographic keys
@@ -138,8 +178,6 @@ application actor loads libraries
 
         process_address_document member_address_document TRUE.
 
-
-        _print chat " \n\n" contacts_info " \n\n".
         // add the requestor to the chat
         encrypted_trn = transaction::encrypt (
             $cid -> requestor,
@@ -151,8 +189,10 @@ application actor loads libraries
         return transaction::success send_array.
     }
 
-    trn add_member _:
-    ($chat_id -> chat_id: global_id, $member -> member: member_t)
+    trn add_member _:(
+        $chat_id -> chat_id: global_id,
+        $member -> member: member_t
+    )
     {
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
         abort "Transaction is expected to be encrypted!" when not current_transaction_info::is_encrypted().
@@ -169,7 +209,10 @@ application actor loads libraries
     }
 
     // actually joining chat
-    trn enter_chat _:($chat -> chat: chat_t, $contacts_info -> contacts_info: contacts_t)
+    trn enter_chat _:(
+        $chat -> chat: chat_t,
+        $contacts_info -> contacts_info: contacts_t
+    )
     {
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
         abort "Transaction is expected to be encrypted!" when not current_transaction_info::is_encrypted().
@@ -194,51 +237,12 @@ application actor loads libraries
             transaction::action::return_data ($chat -> chat, $type -> callback_t::new_chat)
         ].
     }
-
-    trn join_chat invite_link: bin
-    {
-        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
-
-        invite = (_read invite_link) safe invite_t.
-        my_document = get_my_address_document().
-        process_address_document (invite $inviter) TRUE. 
-
-        // generate cryptographic keys to encrypt the invite message
-        crypto_scheme = _crypto_default_scheme_id(). 
-        keypair = _crypto_construct_encryption_keypair crypto_scheme.
-
-        // encrypt the invitation letter
-        encryption_key = invite $key.
-        invite_id = invite $id.
-        encrypted_message = _crypto_encrypt_message (keypair $secret_key) encryption_key (_write ($address_document -> my_document, $name -> user_name)).
-
-        return transaction::success [
-            transaction::action::send (invite $inviter $identity $container_id)
-                ($name -> "::actor::invite", $targ -> ($invite_id -> invite_id, $docs -> encrypted_message, $invitee_key -> (keypair $public_key)))
-        ].
-    }
-
-    trn generate_invite chat_id: global_id
-    {
-        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
-
-        validate_chat_id chat_id.
-
-        invite = create_invite chat_id.
-        
-        return transaction::success [
-            transaction::action::return_data ($chat_id -> chat_id, $invite -> (_write invite), $type -> callback_t::invite_envelope)
-        ].
-    }
-
     // ---------------------------------------------
     //                 Messaging
     // ---------------------------------------------
 
-    trn send_message _:($message -> message: message_t, $timestamp -> timestamp: time)
+    trn send_message message: message_t
     {
-        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
-
         // validate the transaction's origin
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
     
@@ -251,7 +255,7 @@ application actor loads libraries
             // encrypt the message
             encrypted_trn = transaction::encrypt (
                 $cid           -> member_id,
-                $trn           -> ($name -> "::actor::receive_message", $targ -> ($message -> message, $timestamp -> timestamp)),
+                $trn           -> ($name -> "::actor::receive_message", $targ -> message),
                 $isemsignature -> TRUE
             ).
             send_array (_count send_array|) -> transaction::action::send member_id encrypted_trn.
@@ -260,7 +264,7 @@ application actor loads libraries
         return transaction::success send_array.
     }
     
-    trn receive_message _:($message -> message: message_t, $timestamp -> timestamp: time)
+    trn receive_message message: message_t
     {
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
         abort "Transaction is expected to be encrypted!" when not current_transaction_info::is_encrypted().
@@ -276,13 +280,11 @@ application actor loads libraries
         sender = contacts sender_id abort "Internal error: the sender is not in the list of known contacts!" when is NIL.
         sender_name = sender? $name.
         
-
         return transaction::success [
             transaction::action::return_data (
                 $message -> message,
                 $sender_id -> sender_id,
                 $sender_name -> sender_name,
-                $timestamp -> timestamp,
                 $type -> callback_t::new_message
             )
         ].
