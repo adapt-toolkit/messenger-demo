@@ -104,7 +104,6 @@ application actor loads libraries
     trn generate_invite chat_id: global_id
     {
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
-
         validate_chat_id chat_id.
 
         invite = create_invite chat_id.
@@ -162,7 +161,7 @@ application actor loads libraries
         chat = validate_chat_id chat_id.
         contacts_info is contacts_t = (,).
         send_array is transaction::action::type[] = [].
-        sc chat $members -- (member_id->)
+        sc chat $members -- (member_id -> )
         {
             // find contact info for a given member
             contacts_info member_id -> (contacts member_id).
@@ -222,7 +221,7 @@ application actor loads libraries
         validate_chat_not_registered chat_id.
 
         // register other members' documents
-        sc chat $members -- (member_id->)
+        sc chat $members -- (member_id -> )
         {
             contact_info = contacts_info member_id.
             ad = contact_info $address_document.
@@ -250,7 +249,7 @@ application actor loads libraries
         members = chats (message $chat_id) $members.
 
         send_array is transaction::action::type[] = [].
-        sc members -- (member_id->)
+        sc members -- (member_id -> )
         {
             // encrypt the message
             encrypted_trn = transaction::encrypt (
@@ -266,12 +265,10 @@ application actor loads libraries
     
     trn receive_message message: message_t
     {
+        // validate the transaction's origin
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
         abort "Transaction is expected to be encrypted!" when not current_transaction_info::is_encrypted().
         abort "Transaction is expected to be singed!" when not current_transaction_info::is_signed().
-        
-        // validate the transaction's origin
-        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
     
         // extract the sender's packet ID from the transaction envelope
         envelope = current_transaction_info::get_external_envelope_or_abort().
