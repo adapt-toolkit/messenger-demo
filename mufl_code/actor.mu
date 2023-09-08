@@ -37,24 +37,24 @@ application actor loads libraries
         contacts is contacts_t = (,).
         invites is (global_id ->> ($secret_key -> secretkey_encrypt, $chat_id -> global_id)) = (,).
 
-        validate_chat_id = func takes chat_id: global_id returns chat_t does
+        fn validate_chat_id (chat_id: global_id) -> chat_t
         {
             chat = chats chat_id abort "Chat not found wih chat_id [" + chat_id + "] for actor " + _get_container_id() + "!" when is NIL.
             return chat?.
         }
 
-        validate_chat_not_registered = func takes chat_id: global_id does
+        fn validate_chat_not_registered (chat_id: global_id)
         {
             abort "Chat already registered with chat_id [" + chat_id + "] for actor " + _get_container_id() + "!" when chats chat_id.
         }
 
-        validate_invite = func takes invite_id: global_id returns ($secret_key -> secretkey_encrypt, $chat_id -> global_id) does
+        fn validate_invite (invite_id: global_id) -> ($secret_key -> secretkey_encrypt, $chat_id -> global_id)
         {
             invite = invites invite_id abort "Invite not found with invite_id [" + invite_id + "] for actor " + _get_container_id() + "!" when is NIL.
             return invite?.
         }
 
-        create_invite = func takes chat_id: global_id returns invite_t does
+        fn create_invite (chat_id: global_id) -> invite_t
         {
             // generate cryptographic keys for the invite message communication
             crypto_scheme = _crypto_default_scheme_id(). 
@@ -72,8 +72,9 @@ application actor loads libraries
     // ---------------------------------------------
     //                 User initialization
     // ---------------------------------------------
-    deftrans set_user_name (,) takes user_name: str does
+    trn set_user_name user_name: str
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
         ::actor::user_name -> user_name.
         contacts _get_container_id() -> ($name -> user_name, $address_document -> get_my_address_document()).
         return transaction::success [
@@ -85,8 +86,9 @@ application actor loads libraries
     //                 Chat creation
     // ---------------------------------------------
 
-    deftrans create_chat (,) takes _:($chat_name -> chat_name: str) does
+    trn create_chat _:($chat_name -> chat_name: str)
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
         chat_id = _new_id ("create new chat: " + chat_name).
         chat = ($chat_id -> chat_id, $chat_name -> chat_name, $members -> (_get_container_id(),)).
         chats chat_id -> chat.
@@ -100,10 +102,11 @@ application actor loads libraries
     //                 Invitations
     // ---------------------------------------------
 
-    deftrans invite (,) takes _: ($invite_id -> invite_id: global_id, $docs -> member_document_encrypted: crypto_message, $invitee_key -> signing_key: publickey_encrypt) does
+    trn invite _: ($invite_id -> invite_id: global_id, $docs -> member_document_encrypted: crypto_message, $invitee_key -> signing_key: publickey_encrypt)
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
         // get the invite cryptographic keys
-        ?($secret_key -> decryption_key, $chat_id -> chat_id) => validate_invite invite_id.
+        validate_invite invite_id => ($secret_key -> decryption_key, $chat_id -> chat_id).
 
         // decrypt the members address document
         decrypted_docs = _crypto_decrypt_message decryption_key signing_key member_document_encrypted.
@@ -119,7 +122,8 @@ application actor loads libraries
         chat = validate_chat_id chat_id.
         contacts_info is contacts_t = (,).
         send_array is transaction::action::type[] = [].
-        scan chat $members bind member_id do
+        sc chat $members -- (member_id->)
+        {
             // find contact info for a given member
             contacts_info member_id -> (contacts member_id).
         
@@ -130,7 +134,7 @@ application actor loads libraries
                 $isemsignature -> TRUE
             ).
             send_array (_count send_array|) -> transaction::action::send member_id encrypted_trn.
-        end
+        }
 
         process_address_document member_address_document TRUE.
 
@@ -147,9 +151,13 @@ application actor loads libraries
         return transaction::success send_array.
     }
 
-    deftrans add_member (,) takes _:
-    ($chat_id -> chat_id: global_id, $member -> member: member_t) does
+    trn add_member _:
+    ($chat_id -> chat_id: global_id, $member -> member: member_t)
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
+        abort "Transaction is expected to be encrypted!" when not current_transaction_info::is_encrypted().
+        abort "Transaction is expected to be singed!" when not current_transaction_info::is_signed().
+
         validate_chat_id chat_id.
 
         // register the new member
@@ -161,18 +169,23 @@ application actor loads libraries
     }
 
     // actually joining chat
-    deftrans enter_chat (,) takes _:($chat -> chat: chat_t, $contacts_info -> contacts_info: contacts_t) does
+    trn enter_chat _:($chat -> chat: chat_t, $contacts_info -> contacts_info: contacts_t)
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
+        abort "Transaction is expected to be encrypted!" when not current_transaction_info::is_encrypted().
+        abort "Transaction is expected to be singed!" when not current_transaction_info::is_signed().
+
         chat_id = chat $chat_id.
         validate_chat_not_registered chat_id.
 
         // register other members' documents
-        scan chat $members bind member_id do
+        sc chat $members -- (member_id->)
+        {
             contact_info = contacts_info member_id.
             ad = contact_info $address_document.
             contacts member_id -> contact_info.
             process_address_document ad TRUE.
-        end
+        }
 
         // add myself to the chat member registry
         chat $members _get_container_id() -> TRUE.
@@ -182,8 +195,10 @@ application actor loads libraries
         ].
     }
 
-    deftrans join_chat (,) takes invite_link: bin does
+    trn join_chat invite_link: bin
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
+
         invite = (_read invite_link) safe invite_t.
         my_document = get_my_address_document().
         process_address_document (invite $inviter) TRUE. 
@@ -203,8 +218,10 @@ application actor loads libraries
         ].
     }
 
-    deftrans generate_invite (,) takes chat_id: global_id does
+    trn generate_invite chat_id: global_id
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
+
         validate_chat_id chat_id.
 
         invite = create_invite chat_id.
@@ -218,8 +235,10 @@ application actor loads libraries
     //                 Messaging
     // ---------------------------------------------
 
-    deftrans send_message (,) takes _:($message -> message: message_t, $timestamp -> timestamp: time) does
+    trn send_message _:($message -> message: message_t, $timestamp -> timestamp: time)
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
+
         // validate the transaction's origin
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::user,).
     
@@ -227,7 +246,8 @@ application actor loads libraries
         members = chats (message $chat_id) $members.
 
         send_array is transaction::action::type[] = [].
-        scan members bind member_id do
+        sc members -- (member_id->)
+        {
             // encrypt the message
             encrypted_trn = transaction::encrypt (
                 $cid           -> member_id,
@@ -235,13 +255,17 @@ application actor loads libraries
                 $isemsignature -> TRUE
             ).
             send_array (_count send_array|) -> transaction::action::send member_id encrypted_trn.
-        end
+        }
         
         return transaction::success send_array.
     }
     
-    deftrans receive_message (,) takes _:($message -> message: message_t, $timestamp -> timestamp: time) does
+    trn receive_message _:($message -> message: message_t, $timestamp -> timestamp: time)
     {
+        current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
+        abort "Transaction is expected to be encrypted!" when not current_transaction_info::is_encrypted().
+        abort "Transaction is expected to be singed!" when not current_transaction_info::is_signed().
+        
         // validate the transaction's origin
         current_transaction_info::validate_origin_or_abort (transaction::envelope::origin::external,).
     
