@@ -25,18 +25,17 @@ export module adapt_messenger_api {
                     }
                 }
                 else if (type === 'invite_envelope') {
-                    const invite = data.Reduce('invite').GetBinary().toString('hex');
+                    const invite = data.Reduce('invite').GetBinary().toString('');
                     const chat_id = data.Reduce('chat_id').Visualize();
                     if (this.__on_invite_code_generated) {
                         this.__on_invite_code_generated(chat_id, invite);
                     }
-                    // copyToClipboard(invite);   
                 }
                 else if (type === 'new_message') {
                     if (this.__on_message_received_cb) {
                         const message = data.Reduce('message').Reduce('data').Visualize();
                         const chat_id = data.Reduce('message').Reduce('chat_id').Visualize();
-                        const timestamp = data.Reduce('timestamp').Visualize();
+                        const timestamp = data.Reduce('message').Reduce('timestamp').Visualize();
                         const sender_id = data.Reduce('sender_id');
                         const sender_name = data.Reduce('sender_name');
                         const incoming = sender_id.Visualize() !== this.packet.packet.GetContainerID().Visualize();
@@ -61,10 +60,8 @@ export module adapt_messenger_api {
             const trn = adapt_js_api_utils.object_to_adapt_value({
                 name: "::actor::send_message",
                 targ: {
-                    message: {
-                        chat_id: chat_id,
-                        data: message
-                    },
+                    chat_id: chat_id,
+                    data: message,
                     timestamp: timestamp
                 }
             }
