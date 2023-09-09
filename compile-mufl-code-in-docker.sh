@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create a new Docker container from the image and initiate a persistent process within the container
-id=$(docker run -d adaptframework/mufl:main "tail -f /dev/null")
+id=$(docker run -d adaptframework/devkit:release-0.2 "tail -f /dev/null")
 
 # Transfer the MUFL code into the Docker container
 docker cp ./mufl_code $id:/mufl_code
