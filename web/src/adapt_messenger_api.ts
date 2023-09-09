@@ -1,6 +1,5 @@
 import { adapt_js_api, adapt_js_api_utils, adapt_wrapper_browser, adapt_wrappers } from "adapt_utilities"
-import { copyToClipboard } from './utils';
-
+import * as pako from 'pako'
 
 export module adapt_messenger_api {
 
@@ -25,7 +24,7 @@ export module adapt_messenger_api {
                     }
                 }
                 else if (type === 'invite_envelope') {
-                    const invite = data.Reduce('invite').GetBinary().toString('');
+                    const invite = Buffer.from(pako.deflate(data.Reduce('invite').GetBinary())).toString('base64')
                     const chat_id = data.Reduce('chat_id').Visualize();
                     if (this.__on_invite_code_generated) {
                         this.__on_invite_code_generated(chat_id, invite);
@@ -83,9 +82,10 @@ export module adapt_messenger_api {
         }
 
         connect_to_chat = (invite: string) => {
+            const buffer = Buffer.from(pako.inflate(Buffer.from(invite, 'base64')))
             const trn = adapt_js_api_utils.object_to_adapt_value({
                 name: "::actor::join_chat",
-                targ: this.packet.packet.NewBinaryFromHex(invite)
+                targ: this.packet.packet.NewBinaryFromBuffer(buffer)
             })
 
             this.packet.add_client_message(trn);
