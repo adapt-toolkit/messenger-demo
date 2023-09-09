@@ -36,14 +36,33 @@
 .demo-content button {
     padding: 10px 20px;
     font-size: 1rem;
-    background-color: #007bff;
-    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-right: 10px;  /* Add spacing between the buttons */
+}
+
+.demo-content button:last-child {
+    margin-right: 0; /* Ensures the last button doesn't have the extra margin */
 }
 
 .demo-content button:hover {
     background-color: #0056b3;
+}
+
+/* Default "Launch demo" button */
+.demo-content button {
+    background-color: #007bff;
+    color: white;
+}
+
+/* "Additional messenger tab" button */
+.additional-tab-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.additional-tab-button:hover {
+    background-color: #388e3c; /* A slightly darker shade of green for hover effect */
 }
