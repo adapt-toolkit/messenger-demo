@@ -35,7 +35,7 @@ const DemoIntroPage: React.FC = () => {
                 </p>
                 <h3>Give it a try</h3>
                 <button onClick={handleButtonClick}>Launch demo</button>
-                <button onClick={handleAdditionalTabClick} className="additional-tab-button">Additional messenger tab</button>
+                <button onClick={handleAdditionalTabClick} class="additional-tab-button">Additional messenger tab</button>
             </div>
         </div>
     );
