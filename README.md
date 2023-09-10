@@ -12,6 +12,8 @@ Navigate through the sections for an in-depth look:
 3. [How to Build](#how-to-build)
 4. [ADAPT Architecture](#adapt-architecture)
 
+You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1)
+
 ### **About ADAPT Framework**
 
 The ADAPT Framework redefines the realm of internet applications by introducing a mesh of interconnected data nodes, ensuring end-to-end encryption, and pioneering the concept of Technologically-assured trust (TAT). Eliminating the reliance on system operators for superuser-type administration, TAT is indispensable for applications handling sensitive, critical, or proprietary data. Our mission is to offer a robust solution where existing development tools fall short, thereby fostering a modern approach to building both consumer and enterprise internet applications.
