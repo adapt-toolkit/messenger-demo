@@ -8,13 +8,6 @@ const DemoIntroPage: React.FC = () => {
     }
 
     const handleButtonClick = () => {
-        const seed1 = generateSeed();
-        const seed2 = generateSeed();
-        window.open(`/MainPage?seed=${seed1}`, "_blank");
-        window.open(`/MainPage?seed=${seed2}`, "_blank");
-    }
-
-    const handleAdditionalTabClick = () => {
         const seed = generateSeed();
         window.open(`/MainPage?seed=${seed}`, "_blank");
     }
@@ -35,7 +28,6 @@ const DemoIntroPage: React.FC = () => {
                 </p>
                 <h3>Give it a try</h3>
                 <button onClick={handleButtonClick}>Launch demo</button>
-                <button onClick={handleAdditionalTabClick} className="additional-tab-button">Additional messenger tab</button>
             </div>
         </div>
     );

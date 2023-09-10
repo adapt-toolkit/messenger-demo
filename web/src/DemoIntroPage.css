@@ -56,13 +56,3 @@
     background-color: #007bff;
     color: white;
 }
-
-/* "Additional messenger tab" button */
-.demo-content .additional-tab-button {
-    background-color: #4caf50;
-    color: white;
-}
-
-.demo-content .additional-tab-button:hover {
-    background-color: #388e3c; /* A slightly darker shade of green for hover effect */
-}
