@@ -28,6 +28,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, sendMessage }) => {
         }
     };
 
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            onSendClick();
+        }
+    };
+
     if (!chat) {
         return null;
     }
@@ -59,6 +66,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, sendMessage }) => {
                     type="text"
                     value={message}
                     onChange={e => setMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
                     placeholder="Type your message..."
                 />
                 <button onClick={onSendClick}>Send</button>
