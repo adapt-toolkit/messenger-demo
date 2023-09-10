@@ -12,6 +12,8 @@ Navigate through the sections for an in-depth look:
 3. [How to Build](#how-to-build)
 4. [ADAPT Architecture](#adapt-architecture)
 
+You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.1?file=/.codesandbox/README.md:1,1)
+
 ### **About ADAPT Framework**
 
 The ADAPT Framework is used to build a mesh of interconnected data nodes that underlies an internet application. The framework eliminates the traditional REST-based web back end and introduces the capability of distributing the data, and building front-end-only and non-custodial applications. The approach ADAPT takes to building internet applications is especially suitable for handling sensitive, critical, or proprietary data, where the traditional web architecture is unfit for the purpose. 
