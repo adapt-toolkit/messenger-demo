@@ -3,7 +3,7 @@ name: Deploy Messenger Demo to AWS
 on:
   push:
     branches:
-      - release-0.1
+      - release-0.2
 
 jobs:
   deploy:
