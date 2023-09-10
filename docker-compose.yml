@@ -7,6 +7,7 @@ x-service: &service
       max-size: "100m"
       max-file: "2"
   image: messenger-demo
+  restart: always
   entrypoint: ["/bin/bash", "-c"]
 
 services:
