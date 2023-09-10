@@ -1,20 +1,16 @@
+MIT License
+
 Copyright (c) 2020-present Adapt Framework Solutions LTD
 
-This software and associated files (the "Software") may only be used
-for development and testing purposes, and not for production purposes.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-You are granted the right to modify the Software and publish patches
-to the Software. However, all modifications and patches shall remain
-the exclusive property of Adapt Framework Solutions LTD and/or its
-licensors (as applicable). Any such modifications and patches may
-only be used, copied, modified, displayed, distributed, or otherwise
-exploited with a valid approval from Adapt Framework Solutions LTD.
-Furthermore, Adapt Framework Solutions LTD and/or its licensors
-(as applicable) shall retain all right, title, and interest in and
-to all such modifications and patches. No additional rights are
-granted beyond what is expressly stated herein. It is strictly
-prohibited to copy, merge, publish, distribute, sublicense,
-and/or sell the Software without explicit authorization.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,7 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-For all third party components incorporated into the Software, those
-components are licensed under the original license provided by the owner of the
-applicable component.
