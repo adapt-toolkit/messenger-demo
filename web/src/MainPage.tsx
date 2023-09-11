@@ -302,7 +302,7 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
                 <div className="loading-spinner"></div>
                 <h3>Loading ADAPT framework...</h3>
                 <p>
-                    WASM system starting, this may take a few minutes.<br>
+                    WASM system starting, this may take a few minutes.<br/>
                     This will be optimized later on.
                 </p>
             </div>
