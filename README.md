@@ -1,6 +1,8 @@
 # ADAPT Messenger Demo
 
-This repository contains a demo project built using ADAPT: a simple browser-based no-back-end messenger with end-to-end encryption. This example demonstrates how messages can be broadcast securely, with each recipient in a group chat receiving a uniquely encrypted message, all achieved with just a few lines of MUFL code. 
+This repository contains a demo project built using ADAPT: a simple browser-based no-back-end messenger with end-to-end encryption. This example demonstrates how messages can be broadcast securely, with each recipient in a group chat receiving a uniquely encrypted message, all achieved with just a few lines of MUFL code.
+
+A [detailed tutorial](https://docs.adaptframework.solutions/release/0.2/messenger-tutorial-1.html) provides a step-by-step walkthrough for this demo.
 
 Using the messenger functionality as an example, this repository shows the capabilities of the ADAPT framework and MUFL. It demonstrates how the framework can be used to build decentralized applications. 
 
@@ -12,7 +14,7 @@ Navigate through the sections for an in-depth look:
 3. [How to Build](#how-to-build)
 4. [ADAPT Architecture](#adapt-architecture)
 
-You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1)
+You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1).
 
 ### **About ADAPT Framework**
 
@@ -35,7 +37,15 @@ Feel free to join our [discord server](https://discord.gg/VjKSBS2u7H) and ask al
 
 ### **Messenger Architecture**
 
-The ADAPT messenger demo implements a serverless architecture for a bare-bones messaging application. Messages are exchanged directly between the front-end nodes that belong to individual users. In group chats, messages are broadcast, that is they are simultaneously dispatched to every other member of the group. Each message is encrypted using a distinct encryption key.
+The ADAPT messenger demo implements a serverless architecture for a bare-bones messaging application. Messages are exchanged directly between the front-end nodes that belong to individual users. 
+
+The following image shows the way a message propagates through the application's data mesh, consisting of two nodes that belong to two users that are messaging each other. 
+
+![Architecture illustration](images/architecture.png)
+
+As shown in the drawing, once User 1 presses the "SEND" button, the React UI calls ADAPT API, which triggers a "Send message" transaction on the locally-managed ADAPT packet. After the completion of the associate state transition of the packet, a message addressed to User 2 is sent to the broker, which then forwards it to the second user's ADAPT node. This triggers a state transition in the second user's ADAPT packet, according to the "receive message" transaction. The result of that transaction is an event sent via the ADAPT api to React, causing the message to be displayed in the user's browser window. 
+
+In group channels, messages are broadcast, that is they are simultaneously dispatched to every other member of the group. Each message is encrypted using a distinct encryption key.
 
 > **Example:** If a chat consists of 10 members and one of them sends a message, that message is encrypted using 9 unique keys for the 9 other members. These encrypted messages are then sent out individually to each member.
 
@@ -43,7 +53,7 @@ Joining a chat requires an invite code from an existing member who serves as the
 
 The extensive encryption, key exchange, and signing mechanisms discussed above are trivially implemented using features of ADAPT. These features simplify the development process substantially. This demo is designed to illustrate features of ADAPT and is not designed for production use. If you feel drawn to take this messenger project further (someone should!), please ping us in Discord. We are especially interested to collaborate with someone on completing this project into a form of a fully embeddable, customizable and interoperable messenger infrastructure. 
 
-For a more exhaustive understanding of ADAPT, MUFL, and this demo, consult our [detailed tutorial](link-here), which walks you through the demo's development and deep-dives into MUFL code.
+For a more exhaustive understanding of ADAPT, MUFL, and this demo, consult our [detailed tutorial](https://docs.adaptframework.solutions/release/0.2/messenger-tutorial-1.html), which walks you through the demo's development and deep-dives into MUFL code.
 
 ### **Code Structure**
 
@@ -110,7 +120,7 @@ In the context of this messenger demo, the architecture of ADAPT consists of two
 
 1. **Browser User's Node**: This node managers the user's ADAPT packet, which hosts the chat's entire business logic. The browser node supervises the user's packet, processes requests (transactions) within the packet, and stores the packet's new state post-transaction. All of these operations leverage the ADAPT JS API —- a set of TypeScript functions that enable the JS/TS web front-end to drive the execution of the MUFL code over the data embedded within the node. In browser environments, the ADAPT JS API runs on top of a WebAssembly (WASM) module, whereas in native environments, it drives a native NodeJS addon.
 
-   > For a comprehensive understanding of the ADAPT JS API, visit our [documentation](https://docs.adaptframework.solutions/release/0.1/api-reference.html).
+   > For a comprehensive understanding of the ADAPT JS API, visit our [documentation](https://docs.adaptframework.solutions/release/0.2/api-reference.html).
 
 2. **Message Broker**: Within the MUFL code, inter-node communication is guided by packet IDs. The message broker's role is to associate these packet IDs with the actual IP addresses of the nodes. Notably, in this demo, every message that traverses the message broker is encrypted, although this is contingent on the MUFL-based application logic. Consequently, even in scenarios where the message broker's integrity is compromised, the attacker cannot glean any sensitive information.
 

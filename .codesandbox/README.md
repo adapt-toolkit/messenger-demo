@@ -1,8 +1,10 @@
-## Interactive Adapt hello world example
+## Interactive ADAPT Messenger Demo
 
 [![Try in Codesandbox.io](https://img.shields.io/badge/Try%20in%20Codesandbox.io-blue)](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1)
 
 Welcome to the interactive sandbox featuring the [ADAPT Framework](https://www.adaptframework.solutions/) interactive demo. You can find more information in [our documentation](https://docs.adaptframework.solutions/).
+
+More about this demo in the [project's README](../README.md), which we highly recommend to take a look at.
 
 To experiment with code, you should clone this repository to your [codesandbox](https://codesandbox.io) account by clicking "Create Branch" or "Fork" in the top right corner. This is necessary to access the preview window, open the terminal, and make changes to the code. 
 

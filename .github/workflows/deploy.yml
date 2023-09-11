@@ -30,8 +30,8 @@ jobs:
           echo "$(git log --format=%B -n 1 ${GITHUB_SHA})" >> COMMIT
           echo "Event: $GITHUB_EVENT_NAME by $GITHUB_ACTOR" >> COMMIT
           echo "Ref: $(git rev-parse --short HEAD) in $GITHUB_REF_NAME" >> COMMIT
-          rsync -azP --delete -e "ssh -o StrictHostKeyChecking=no" ./ root@ec2-54-196-81-97.compute-1.amazonaws.com:/opt/demo-messenger
-          ssh -o StrictHostKeyChecking=no root@ec2-54-196-81-97.compute-1.amazonaws.com 'cd /opt/demo-messenger && docker build --build-arg broker_address="wss://messenger-demo.adaptframework.solutions/broker" . -t messenger-demo && docker compose up -d'
+          rsync -azP --delete -e "ssh -o StrictHostKeyChecking=no" ./ root@ec2-34-229-89-98.compute-1.amazonaws.com:/opt/demo-messenger
+          ssh -o StrictHostKeyChecking=no root@ec2-34-229-89-98.compute-1.amazonaws.com 'cd /opt/demo-messenger && docker build --build-arg broker_address="wss://messenger-demo.adaptframework.solutions/broker" . -t messenger-demo && docker compose up -d'
 
       - name: Save job status
         if: always()
