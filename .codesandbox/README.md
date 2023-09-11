@@ -1,14 +1,10 @@
 ## Interactive ADAPT Messenger Demo
 
-[![Try in Codesandbox.io](https://img.shields.io/badge/Try%20in%20Codesandbox.io-blue)](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1)
+Welcome to the [ADAPT](https://www.adaptframework.solutions/) interactive messenger demo. This is the sandbox version of [ADAPT demo](https://messenger-demo.adaptframework.solutions/) which shows a bare-bones front-end-only browser-based messaging application. 
 
-Welcome to the interactive sandbox featuring the [ADAPT Framework](https://www.adaptframework.solutions/) interactive demo. You can find more information in [our documentation](https://docs.adaptframework.solutions/).
+For the detailed description of the demo and context, please see the [project's README](../README.md), which introduces the ADAPT framework and describes the basic architecture of this demo project. For the detailed explanation of MUFL code that implements the messenger logic see tutorial [Part 1](https://docs.adaptframework.solutions/messenger-tutorial-1.html) and [Part2](https://docs.adaptframework.solutions/messenger-tutorial-2.html)
 
-More about this demo in the [project's README](../README.md), which we highly recommend to take a look at.
-
-To experiment with code, you should clone this repository to your [codesandbox](https://codesandbox.io) account by clicking "Create Branch" or "Fork" in the top right corner. This is necessary to access the preview window, open the terminal, and make changes to the code. 
-
-Note: If you do not clone the repository, you will not be able to perform any of the aforementioned actions.
+The sandbox allows you to experiment with code on your own. To do this, you should clone this repository to your [codesandbox](https://codesandbox.io) account by clicking "Create Branch" or "Fork" in the top right corner. This is necessary to access the preview window, open the terminal, and make changes to the code. If you experience any problems, please ping us on [our Discord](https://discord.gg/VjKSBS2u7H). 
 
 [Codesandbox](https://codesandbox.io) provides [Cloud Sandboxes](https://codesandbox.io/docs/learn/environment/vm) with the following specifications:
 - 2 vCPUs

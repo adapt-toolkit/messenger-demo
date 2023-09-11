@@ -39,7 +39,7 @@ Feel free to join our [discord server](https://discord.gg/VjKSBS2u7H) and ask al
 
 The ADAPT messenger demo implements a serverless architecture for a bare-bones messaging application. Messages are exchanged directly between the front-end nodes that belong to individual users. 
 
-The following image shows the way a message propagates through the application's data mesh, consisting of two nodes that belong to two users that are messaging each other. 
+The following image shows the way a message propagates through the application's data mesh, consisting of two nodes that belong to two users that are messaging each other. (If the image does not display correctly, you can see it in this repository in `images/architecture.png`)
 
 ![Architecture illustration](images/architecture.png)
 
