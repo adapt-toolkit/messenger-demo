@@ -18,6 +18,8 @@ const DemoIntroPage: React.FC<DemoIntroPageProps> = ({openNewMessengerTab}) => {
                     with embedded business logic, that communicate using a dumb message broker. The logic within the 
                     data nodes is built using ADAPT's special-purpose language called MUFL. <br /><br />
 
+                    For full context on this demo and the framework, please see <a href="https://github.com/adapt-toolkit/messenger-demo/tree/release-0.2">the README file.</a>
+
                     The messages between participants are broadcast securely, 
                     with each recipient in a group chat receiving a uniquely encrypted message.<br /><br />
 
