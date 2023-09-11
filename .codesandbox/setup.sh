@@ -1,5 +1,5 @@
 if [ ! -d "/mufl" ]; then
-    id=$(docker create adaptframework/devkit:release-0.1)
+    id=$(docker create adaptframework/devkit:release-0.2)
     docker cp $id:/mufl /mufl
     docker rm -v $id
 fi
