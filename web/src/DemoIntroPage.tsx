@@ -17,14 +17,17 @@ const DemoIntroPage: React.FC = () => {
             <div className="demo-content">
                 <h2>ADAPT Messenger Demo</h2>
                 <p>
-                    This demo demonstrates a fully operational web-messenger.<br />
-                    It is decentralized.<br />
-                    It is end-to-end encrypted.<br /><br />
+                    This project demonstrates a bare bones web-messenger with end-to-end encryption using ADAPT framework.<br />
+
+                    ADAPT Framework is a developer toolkit for building distributed data meshes 
+                    that replace the backend of Web applications. The framework enables creation of front-end data nodes 
+                    with embedded business logic, that communicate using a dumb message broker. The logic within the 
+                    data nodes is built using ADAPT's special-purpose language called MUFL. <br />
 
                     Click "Launch demo" to chat to yourself.<br />
                     Share the invite link with a friend to chat together.<br /><br />
 
-                    And it is written in sheer 289 lines of MUFL code: just the amount of symbols this text has.
+                    This demo is built with mere 289 lines of MUFL code.
                 </p>
                 <h3>Give it a try</h3>
                 <button onClick={handleButtonClick}>Launch demo</button>
