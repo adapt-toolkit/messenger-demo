@@ -14,7 +14,7 @@ Navigate through the sections for an in-depth look:
 3. [How to Build](#how-to-build)
 4. [ADAPT Architecture](#adapt-architecture)
 
-You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1).
+You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1) or simply [run it in your browser](https://messenger-demo.adaptframework.solutions/). 
 
 ### **About ADAPT Framework**
 
