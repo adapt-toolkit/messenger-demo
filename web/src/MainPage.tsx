@@ -315,7 +315,10 @@ const MainPage: React.FC<MainPageProps> = ({ openNewMessengerTab }) => {
             adapt_messenger_api.on_message_received = receiveMessage;
             adapt_messenger_api.on_set_user_name = onSetUserName;
             adapt_messenger_api.on_invite_code_generated = onInviteCodeGenerated;
-            setAdaptMessengerApi(adapt_messenger_api);
+            setTimeout(() => {
+                setAdaptMessengerApi(adapt_messenger_api);
+            }, 2000);
+                        
             if (stage === 0) {
                 openTourStage(0);
             }
