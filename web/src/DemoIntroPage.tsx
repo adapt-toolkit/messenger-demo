@@ -17,14 +17,12 @@ const DemoIntroPage: React.FC = () => {
             <div className="demo-content">
                 <h2>ADAPT Messenger Demo</h2>
                 <p>
-                    This demo demonstrates a fully operational web-messenger.<br />
-                    It is decentralized.<br />
-                    It is end-to-end encrypted.<br /><br />
+                    This demo showcases a simple browser-based no-back-end messenger with end-to-end encryption.<br />
 
-                    Click "Launch demo" to chat to yourself.<br />
-                    Share the invite link with a friend to chat together.<br /><br />
+                    The messages are broadcast securely, with each recipient in a group chat receiving a uniquely encrypted message<br />
+                    The business loggic is written in just under 300 lines of MUFL code.<br /><br />
 
-                    And it is written in sheer 289 lines of MUFL code: just the amount of symbols this text has.
+                    This demo allows you to chat with another user. If you have an invite code from them, click "Launch demo" to open a new chat window, click "connect to chat" and enter that code
                 </p>
                 <h3>Give it a try</h3>
                 <button onClick={handleButtonClick}>Launch demo</button>
