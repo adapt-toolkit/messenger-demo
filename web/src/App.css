@@ -232,3 +232,38 @@
   padding: 4px 8px;
   border-radius: 8px;
 }
+
+.chat-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.chat-section .chat-list {
+    flex: 1; 
+    margin-right: 15px; 
+}
+
+.open-tab-button {
+    flex: 1; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 10px 20px;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #9966ff;
+    transition: background-color 0.3s;
+    max-width: 200px;
+    width: auto;
+    margin: 0 auto;
+}
+
+.open-tab-button:hover {
+    background-color: #70807a;
+}

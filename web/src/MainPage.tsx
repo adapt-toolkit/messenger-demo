@@ -369,7 +369,14 @@ const MainPage: React.FC<MainPageProps> = ({ openNewMessengerTab }) => {
             <button className="create-chat-button" onClick={createNewChat}>Create a new chat</button>
             <button className="connect-chat-button" onClick={connectToChatViaCode}>Connect to a chat</button>
             {activeChat !== null && <ChatWindow key={chats[activeChat].history.length} chat={chats[activeChat]} sendMessage={sendMessage} />}
-            <ChatList chats={chats} setActiveChat={setActiveChatProxy} generateInviteCode={generateInviteCode} copiedInviteCodeChatId={copiedInviteCodeChatId} />
+            <div className="chat-section">
+                <ChatList chats={chats} setActiveChat={setActiveChatProxy} generateInviteCode={generateInviteCode} copiedInviteCodeChatId={copiedInviteCodeChatId} />
+                {activeChat !== null && 
+                    <button className="open-tab-button" onClick={openNewMessengerTab}>
+                        New messenger tab
+                    </button>
+                }
+            </div>
         </div>
     )
 };
