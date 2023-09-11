@@ -14,7 +14,7 @@ Navigate through the sections for an in-depth look:
 3. [How to Build](#how-to-build)
 4. [ADAPT Architecture](#adapt-architecture)
 
-You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1).
+You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1) or simply [run it in your browser](https://messenger-demo.adaptframework.solutions/). 
 
 ### **About ADAPT Framework**
 
@@ -37,7 +37,15 @@ Feel free to join our [discord server](https://discord.gg/VjKSBS2u7H) and ask al
 
 ### **Messenger Architecture**
 
-The ADAPT messenger demo implements a serverless architecture for a bare-bones messaging application. Messages are exchanged directly between the front-end nodes that belong to individual users. In group chats, messages are broadcast, that is they are simultaneously dispatched to every other member of the group. Each message is encrypted using a distinct encryption key.
+The ADAPT messenger demo implements a serverless architecture for a bare-bones messaging application. Messages are exchanged directly between the front-end nodes that belong to individual users. 
+
+The following image shows the way a message propagates through the application's data mesh, consisting of two nodes that belong to two users that are messaging each other. 
+
+![Architecture illustration](images/architecture.png)
+
+As shown in the drawing, once User 1 presses the "SEND" button, the React UI calls ADAPT API, which triggers a "Send message" transaction on the locally-managed ADAPT packet. After the completion of the associate state transition of the packet, a message addressed to User 2 is sent to the broker, which then forwards it to the second user's ADAPT node. This triggers a state transition in the second user's ADAPT packet, according to the "receive message" transaction. The result of that transaction is an event sent via the ADAPT api to React, causing the message to be displayed in the user's browser window. 
+
+In group channels, messages are broadcast, that is they are simultaneously dispatched to every other member of the group. Each message is encrypted using a distinct encryption key.
 
 > **Example:** If a chat consists of 10 members and one of them sends a message, that message is encrypted using 9 unique keys for the 9 other members. These encrypted messages are then sent out individually to each member.
 

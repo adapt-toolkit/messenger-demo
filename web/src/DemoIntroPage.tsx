@@ -11,12 +11,19 @@ const DemoIntroPage: React.FC<DemoIntroPageProps> = ({openNewMessengerTab}) => {
             <div className="demo-content">
                 <h2>ADAPT Messenger Demo</h2>
                 <p>
-                    This demo showcases a simple browser-based no-back-end messenger with end-to-end encryption.<br /><br />
+                    This project demonstrates a bare bones web-messenger with end-to-end encryption using ADAPT framework.<br /><br />
 
-                    The messages are broadcast securely, with each recipient in a group chat receiving a uniquely encrypted message.<br /><br />
-                    The business loggic is written in just under 300 lines of MUFL code.<br /><br />
+                    ADAPT Framework is a developer toolkit for building distributed data meshes 
+                    that replace the backend of Web applications. The framework enables creation of front-end data nodes 
+                    with embedded business logic, that communicate using a dumb message broker. The logic within the 
+                    data nodes is built using ADAPT's special-purpose language called MUFL. <br /><br />
 
-                    This demo allows you to chat with another user. If you have an invite code from them, click "Launch demo" to open a new chat window, click "connect to chat" and enter that code.
+                    For full context on this demo and the framework, please see <a href="https://github.com/adapt-toolkit/messenger-demo/tree/release-0.2">the README file.</a>
+
+                    The messages between participants are broadcast securely, 
+                    with each recipient in a group chat receiving a uniquely encrypted message.<br /><br />
+
+                    This demo is built with just under 300 lines of MUFL code.
                 </p>
                 <h3>Give it a try</h3>
                 <button onClick={openNewMessengerTab}>Launch demo</button>
