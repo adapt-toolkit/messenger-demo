@@ -8,11 +8,10 @@ interface MainPageProps {
     openNewMessengerTab: () => void
 }
 
-const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
+const MainPage: React.FC<MainPageProps> = ({ openNewMessengerTab }) => {
     const [tourIsOpen, setTourIsOpen] = useState<boolean>(false);
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [newTabOpened, setNewTabOpened] = useState<boolean>(false);
-
 
     const getTourStage = () => {
         return +(localStorage.getItem('tourStage') || '0');
@@ -102,11 +101,25 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
         [] // dummy stage 5
     ]
 
-    const [chats, setChats] = useState<Array<{ name: string, id: string; history: Array<{ text: string, incoming: boolean, timestamp: string, from: string, color: string }>; has_unread: boolean }>>([]);
+    const [chats, setChats] = useState<Array<{ 
+        name: string, 
+        id: string; 
+        history: Array<{ 
+            text: string, 
+            incoming: boolean, 
+            timestamp: string, 
+            from: string, 
+            bgColor: string, 
+            mainTextColor: string, 
+            labelTextColor: string 
+        }>; 
+        has_unread: boolean 
+    }>>([]);    
     const [activeChat, setActiveChat] = useState<number | null>(null);
     const [adaptMessengerApi, setAdaptMessengerApi] = useState<adapt_messenger_api.AdaptMessengerAPI | undefined>(undefined)
     const [userName, setUserName] = useState<string>("");
     const [copiedInviteCodeChatId, setCopiedInviteCodeChatId] = useState<string | null>(null);
+    const userColorMapRef = useRef(new Map());
 
     const createNewChat = () => {
         setTourIsOpen(false);
@@ -146,7 +159,22 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
         const updatedChats = [...chatsRef.current];
         for (let chat of updatedChats) {
             if (chat.id === chat_id) {
-                chat.history.push({ text: message, incoming: incoming, timestamp: timestamp, from: from_name, color: generateColor(from_id) });
+                let colorTrio;
+                if (userColorMapRef.current.has(from_id)) {
+                    colorTrio = userColorMapRef.current.get(from_id);
+                } else {
+                    colorTrio = generateColorTrio();
+                    userColorMapRef.current.set(from_id, colorTrio);
+                }
+                chat.history.push({
+                    text: message,
+                    incoming: incoming,
+                    timestamp: timestamp,
+                    from: from_name,
+                    bgColor: colorTrio.bgColor,
+                    mainTextColor: colorTrio.mainTextColor,
+                    labelTextColor: colorTrio.labelTextColor
+                });
                 if (activeChatRef.current === null || chat.id !== updatedChats[activeChatRef.current]?.id) {
                     chat.has_unread = true;
                 }
@@ -157,16 +185,47 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
         openTourStage(2);
     };
 
-    const generateColor = (str: string) => {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    const getRandomInt = (min: number, max: number): number => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    const getLuminance = (r: number, g: number, b: number): number => {
+        let RsRGB = r / 255;
+        let GsRGB = g / 255;
+        let BsRGB = b / 255;
+    
+        let R = (RsRGB <= 0.03928) ? RsRGB / 12.92 : Math.pow(((RsRGB + 0.055) / 1.055), 2.4);
+        let G = (GsRGB <= 0.03928) ? GsRGB / 12.92 : Math.pow(((GsRGB + 0.055) / 1.055), 2.4);
+        let B = (BsRGB <= 0.03928) ? BsRGB / 12.92 : Math.pow(((BsRGB + 0.055) / 1.055), 2.4);
+    
+        return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+    }
+    
+    const generateColorTrio = (): { bgColor: string, mainTextColor: string, labelTextColor: string } => {
+        let bgR = Math.floor((getRandomInt(170, 255) + 255) / 2); // Mix with white
+        let bgG = Math.floor((getRandomInt(170, 255) + 255) / 2);
+        let bgB = Math.floor((getRandomInt(170, 255) + 255) / 2);
+    
+        let bgColor = `rgb(${bgR}, ${bgG}, ${bgB})`;
+        let luminance = getLuminance(bgR, bgG, bgB);
+    
+        let mainTextColor = (luminance > 0.5) ? 'black' : 'white';
+        
+        let labelTextColor;
+        if (luminance > 0.7) {
+            labelTextColor = 'darkgrey'; // Darker than black for distinction
+        } else if (luminance < 0.3) {
+            labelTextColor = 'lightgrey'; // Lighter than white for distinction
+        } else {
+            labelTextColor = (mainTextColor === 'black') ? 'white' : 'black'; // Opposite of main text
         }
-
-        // Get a value between 50 and 200 to get a shade of blue
-        const value = (hash & 0xFF) % 150 + 50;
-        return `rgb(${value}, ${value}, 255)`;  // Adjusting only the blue value
-    };
+    
+        return {
+            bgColor: bgColor,
+            mainTextColor: mainTextColor,
+            labelTextColor: labelTextColor
+        };
+    }    
 
     // Use a ref to ensure the callback has the most recent `chats` and `activeChat` state
     const chatsRef = useRef(chats);
@@ -257,8 +316,7 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
             adapt_messenger_api.on_set_user_name = onSetUserName;
             adapt_messenger_api.on_invite_code_generated = onInviteCodeGenerated;
             setAdaptMessengerApi(adapt_messenger_api);
-            if (stage === 0)
-            {
+            if (stage === 0) {
                 openTourStage(0);
             }
         })).bind(this, __tourStage);
