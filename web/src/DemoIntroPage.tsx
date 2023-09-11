@@ -1,17 +1,11 @@
 import React from 'react';
 import './DemoIntroPage.css';
 
-const DemoIntroPage: React.FC = () => {
-    
-    const generateSeed = () => {
-        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    }
+interface DemoIntroPageProps {
+    openNewMessengerTab: () => void
+}
 
-    const handleButtonClick = () => {
-        const seed = generateSeed();
-        window.open(`/MainPage?seed=${seed}`, "_blank");
-    }
-
+const DemoIntroPage: React.FC<DemoIntroPageProps> = ({openNewMessengerTab}) => {
     return (
         <div className="demo-container">
             <div className="demo-content">
@@ -27,7 +21,7 @@ const DemoIntroPage: React.FC = () => {
                     And it is written in sheer 289 lines of MUFL code: just the amount of symbols this text has.
                 </p>
                 <h3>Give it a try</h3>
-                <button onClick={handleButtonClick}>Launch demo</button>
+                <button onClick={openNewMessengerTab}>Launch demo</button>
             </div>
         </div>
     );
