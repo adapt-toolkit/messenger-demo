@@ -112,7 +112,7 @@ In the context of this messenger demo, the architecture of ADAPT consists of two
 
 1. **Browser User's Node**: This node managers the user's ADAPT packet, which hosts the chat's entire business logic. The browser node supervises the user's packet, processes requests (transactions) within the packet, and stores the packet's new state post-transaction. All of these operations leverage the ADAPT JS API —- a set of TypeScript functions that enable the JS/TS web front-end to drive the execution of the MUFL code over the data embedded within the node. In browser environments, the ADAPT JS API runs on top of a WebAssembly (WASM) module, whereas in native environments, it drives a native NodeJS addon.
 
-   > For a comprehensive understanding of the ADAPT JS API, visit our [documentation](https://docs.adaptframework.solutions/release/0.1/api-reference.html).
+   > For a comprehensive understanding of the ADAPT JS API, visit our [documentation](https://docs.adaptframework.solutions/release/0.2/api-reference.html).
 
 2. **Message Broker**: Within the MUFL code, inter-node communication is guided by packet IDs. The message broker's role is to associate these packet IDs with the actual IP addresses of the nodes. Notably, in this demo, every message that traverses the message broker is encrypted, although this is contingent on the MUFL-based application logic. Consequently, even in scenarios where the message broker's integrity is compromised, the attacker cannot glean any sensitive information.
 
