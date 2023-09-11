@@ -1,7 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface ChatWindowProps {
-    chat: { id: string; name: string; history: Array<{ text: string, incoming: boolean, timestamp: string, from: string, color: string }> };
+    chat: { 
+        id: string; 
+        name: string; 
+        history: Array<{ 
+            text: string, 
+            incoming: boolean, 
+            timestamp: string, 
+            from: string, 
+            bgColor: string, 
+            mainTextColor: string, 
+            labelTextColor: string 
+        }> 
+    };
     sendMessage: (message: string) => void;
 }
 
@@ -54,9 +66,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chat, sendMessage }) => {
                     chat.history.map((messageDetails, index) => (
                         <div key={index}
                             className={`chat-message ${messageDetails.incoming ? 'incoming' : 'outgoing'}`}
-                            style={{ backgroundColor: messageDetails.incoming ? messageDetails.color : "#f0f0f0"}}>
-                            <span className="chat-timestamp">{messageDetails.timestamp}</span>
-                            <span className="chat-from">{messageDetails.from}</span>: {messageDetails.text}
+                            style={{ backgroundColor: messageDetails.bgColor }}>
+                            
+                            <span className="chat-timestamp" style={{ color: messageDetails.labelTextColor }}>
+                                {messageDetails.timestamp}
+                            </span>
+                            <span style={{ color: messageDetails.mainTextColor }}>
+                                {messageDetails.from}: {messageDetails.text}
+                            </span>
                         </div>
                     ))
                 )}
