@@ -299,11 +299,9 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
     if (!adaptMessengerApi) {
         return (
             <div className="loading-container">
-                <div className="loading-spinner"></div>
                 <h3>Loading ADAPT framework...</h3>
                 <p>
-                    WASM system starting, this may take a few minutes.<br/>
-                    This will be optimized later on.
+                    WASM system starting, this may take a few seconds.
                 </p>
             </div>
         );
