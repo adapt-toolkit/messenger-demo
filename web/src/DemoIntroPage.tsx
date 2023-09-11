@@ -1,17 +1,11 @@
 import React from 'react';
 import './DemoIntroPage.css';
 
-const DemoIntroPage: React.FC = () => {
-    
-    const generateSeed = () => {
-        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    }
+interface DemoIntroPageProps {
+    openNewMessengerTab: () => void
+}
 
-    const handleButtonClick = () => {
-        const seed = generateSeed();
-        window.open(`/MainPage?seed=${seed}`, "_blank");
-    }
-
+const DemoIntroPage: React.FC<DemoIntroPageProps> = ({openNewMessengerTab}) => {
     return (
         <div className="demo-container">
             <div className="demo-content">
@@ -25,7 +19,7 @@ const DemoIntroPage: React.FC = () => {
                     This demo allows you to chat with another user. If you have an invite code from them, click "Launch demo" to open a new chat window, click "connect to chat" and enter that code
                 </p>
                 <h3>Give it a try</h3>
-                <button onClick={handleButtonClick}>Launch demo</button>
+                <button onClick={openNewMessengerTab}>Launch demo</button>
             </div>
         </div>
     );
