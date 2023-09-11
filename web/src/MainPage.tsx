@@ -32,7 +32,7 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
             return;
         }
         localStorage.setItem('additioanalWindowOpened', "1");
-        openTourStage(4, false);
+        openTourStage(3, false);
         openNewMessengerTab();
     }
 
@@ -41,7 +41,6 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
             { // step 0
                 selector: '.set-username-button',
                 content: 'Click this button to set your user name before using the chat.',
-                disableInteraction: false
             },
         ],
         [ // stage 1
@@ -52,32 +51,12 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
             {
                 selector: '.create-chat-button',
                 content: 'Click here to create a new chat.',
-                disableInteraction: false
             },
         ],
         [ // stage 2
             {
-                selector: '.chat-input input',
-                content: 'Type your message here.',
-                disableInteraction: false
-            },
-            {
-                selector: '.chat-input button',
-                content: 'Click this "Send" button to send your message or simply press "Enter".',
-            },
-        ],
-        [ // stage 3
-            {
                 selector: '.chat-message',
                 content: 'Here is the message you have just sent.'
-            },
-            {
-                selector: '.chat-from',
-                content: 'It shows the author of the message (You).'
-            },
-            {
-                selector: '.chat-timestamp',
-                content: 'It also shows when the message has been sent.'
             },
             {
                 selector: '.chat-item',
@@ -100,13 +79,13 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
                 },
             }
         ],
-        [ // stage 4
+        [ // stage 3
             {
                 selector: '.connect-chat-button',
                 content: "Now that we have copied the invite code, use it to join the chat. The code is already in your clipboard buffer."
             },
         ],
-        [ // stage 5
+        [ // stage 4
             {
                 selector: '.chat-history',
                 content: "We don't see any previous messages since this client did not have an access to the chat when the messages were sent.",
@@ -117,14 +96,11 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
             },
             {
                 content: 'Click',
-                action: () => openTourStage(6, false),
+                action: () => openTourStage(5, false),
             }
         ],
-        [] // dummy stage 6
+        [] // dummy stage 5
     ]
-
-
-
 
     const [chats, setChats] = useState<Array<{ name: string, id: string; history: Array<{ text: string, incoming: boolean, timestamp: string, from: string, color: string }>; has_unread: boolean }>>([]);
     const [activeChat, setActiveChat] = useState<number | null>(null);
@@ -141,7 +117,6 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
     }
 
     const __createNewChat = (chat_id: string, name: string) => {
-        openTourStage(2);
         setActiveChat(chatsRef.current.length)
         setChats([...chatsRef.current, { name, id: chat_id, history: [], has_unread: false }]);
     };
@@ -150,7 +125,7 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
         const cookie = prompt("Please enter the invite code:");
         if (cookie) {
             connectToChat(cookie);
-            openTourStage(5);
+            openTourStage(4);
         }
     };
 
@@ -179,7 +154,7 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
             }
         }
         setChats(updatedChats);
-        openTourStage(3);
+        openTourStage(2);
     };
 
     const generateColor = (str: string) => {
@@ -231,9 +206,8 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
     const onSetUserName = (user_name: string) => {
         setUserName(user_name);
         openTourStage(1);
-        if (getTourStage() === 4)
-            openTourStage(4);
-        // setTourIsOpen(true);
+        if (getTourStage() === 3)
+            openTourStage(3);
     }
 
     const setUserNameFromPrompt = () => {
@@ -245,7 +219,6 @@ const MainPage: React.FC<MainPageProps> = ({openNewMessengerTab}) => {
             }
         }
     }
-
 
     useEffect(() => {
         // This function is executed just once when the page is loaded.
