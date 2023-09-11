@@ -26,8 +26,7 @@ const DemoIntroPage: React.FC<DemoIntroPageProps> = ({openNewMessengerTab}) => {
                     For full context on this demo and the framework, please see <a href="https://github.com/adapt-toolkit/messenger-demo/tree/release-0.2" target="_blank">the README file.</a>
                     <br/><br/>
 
-                    If you experience any issues, please ping us on our <a href="https://discord.gg/VjKSBS2u7H">Discord</a> 
-                    and we will be happy to help. 
+                    If you experience any issues, please ping us on our <a href="https://discord.gg/VjKSBS2u7H">Discord</a>.
                 </p>
                 <h3>Give it a try</h3>
                 <button onClick={openNewMessengerTab}>Launch demo</button>
