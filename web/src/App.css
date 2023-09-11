@@ -267,3 +267,17 @@
 .open-tab-button:hover {
     background-color: #70807a;
 }
+
+.instructions-textarea {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 300px;
+  height: 150px;
+  padding: 10px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  overflow-y: scroll;
+}
