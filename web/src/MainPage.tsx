@@ -239,11 +239,9 @@ const MainPage: React.FC<MainPageProps> = ({ openNewMessengerTab }) => {
     if (userName === '') {
         return (
             <div>
-                <textarea
-                    className="instructions-textarea"
-                    readOnly
-                    value="This initial screen given you a way to set your user name to be used in the chat. Please click the 'set user name' button and enter the user name into the popup."
-                />
+                <div className="instructions-text">
+                    This initial screen given you a way to set your user name to be used in the chat. Please click the 'set user name' button and enter the user name into the popup.
+                </div>
                 <button className="set-username-button" onClick={setUserNameFromPrompt}>Set user name</button>
             </div>
         )
@@ -251,17 +249,15 @@ const MainPage: React.FC<MainPageProps> = ({ openNewMessengerTab }) => {
 
     return (
         <div>
-            <textarea
-                className="instructions-textarea"
-                readOnly
-                value="This is the main screen of the messenger. It starts with two buttons: 'create new chat' and 'connect to chat'. if this is your first use of the demo, please click the 'create new chat' button and enter the chat name into the popup. If you already have a chat a going, then click 'connect to chat' and enter the chat invite code.
-
-Once you have a chat going, you can send messages by typing into the text box at the bottom of the screen and clicking 'send'. You can also click the 'new messenger tab' button to open a new tab with the chat client.
-
-Click 'copy invite code' to copy the invite code for the current chat to your clipboard. 
-
-You can use this code to connect to the same chat as a different user from another tab on your device or send it to a friend."
-            />
+            <div className="instructions-text">
+                This is the main screen of the messenger. It starts with two buttons: 'create new chat' and 'connect to chat'. if this is your first use of the demo, please click the 'create new chat' button and enter the chat name into the popup. If you already have a chat a going, then click 'connect to chat' and enter the chat invite code.
+                <br/><br/>
+                Once you have a chat going, you can send messages by typing into the text box at the bottom of the screen and clicking 'send'. You can also click the 'new messenger tab' button to open a new tab with the chat client.
+                <br/><br/>
+                Click 'copy invite code' to copy the invite code for the current chat to your clipboard.
+                <br/><br/>
+                You can use this code to connect to the same chat as a different user from another tab on your device or send it to a friend.
+            </div>
             <div className="username-display">Logged in as: {userName}</div>
             <button className="create-chat-button" onClick={createNewChat}>Create a new chat</button>
             <button className="connect-chat-button" onClick={connectToChatViaCode}>Connect to a chat</button>

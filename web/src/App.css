@@ -268,16 +268,16 @@
     background-color: #70807a;
 }
 
-.instructions-textarea {
-  position: absolute;
+.instructions-text {
+  position:absolute;
   top: 10px;
   left: 10px;
-  width: 300px;
-  height: 150px;
-  padding: 10px;
-  font-size: 0.9rem;
+  margin: 20px;
+  padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 10px;
   background-color: #f9f9f9;
-  overflow-y: scroll;
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: pre-wrap;
 }
