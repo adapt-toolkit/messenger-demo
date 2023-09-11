@@ -1,6 +1,8 @@
 # ADAPT Messenger Demo
 
-This repository contains a demo project built using ADAPT: a simple browser-based no-back-end messenger with end-to-end encryption. This example demonstrates how messages can be broadcast securely, with each recipient in a group chat receiving a uniquely encrypted message, all achieved with just a few lines of MUFL code. 
+This repository contains a demo project built using ADAPT: a simple browser-based no-back-end messenger with end-to-end encryption. This example demonstrates how messages can be broadcast securely, with each recipient in a group chat receiving a uniquely encrypted message, all achieved with just a few lines of MUFL code.
+
+A [detailed tutorial](https://docs.adaptframework.solutions/release/0.2/messenger-tutorial-1.html) provides a step-by-step walkthrough for this demo.
 
 Using the messenger functionality as an example, this repository shows the capabilities of the ADAPT framework and MUFL. It demonstrates how the framework can be used to build decentralized applications. 
 
@@ -12,7 +14,7 @@ Navigate through the sections for an in-depth look:
 3. [How to Build](#how-to-build)
 4. [ADAPT Architecture](#adapt-architecture)
 
-You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1)
+You can try this demo in [interactive codesandbox](https://codesandbox.io/p/github/adapt-toolkit/adapt-hello-world-example/release-0.2?file=/.codesandbox/README.md:1,1).
 
 ### **About ADAPT Framework**
 
@@ -43,7 +45,7 @@ Joining a chat requires an invite code from an existing member who serves as the
 
 The extensive encryption, key exchange, and signing mechanisms discussed above are trivially implemented using features of ADAPT. These features simplify the development process substantially. This demo is designed to illustrate features of ADAPT and is not designed for production use. If you feel drawn to take this messenger project further (someone should!), please ping us in Discord. We are especially interested to collaborate with someone on completing this project into a form of a fully embeddable, customizable and interoperable messenger infrastructure. 
 
-For a more exhaustive understanding of ADAPT, MUFL, and this demo, consult our [detailed tutorial](link-here), which walks you through the demo's development and deep-dives into MUFL code.
+For a more exhaustive understanding of ADAPT, MUFL, and this demo, consult our [detailed tutorial](https://docs.adaptframework.solutions/release/0.2/messenger-tutorial-1.html), which walks you through the demo's development and deep-dives into MUFL code.
 
 ### **Code Structure**
 
