@@ -162,6 +162,10 @@ const MainPage: React.FC<MainPageProps> = ({ openNewMessengerTab }) => {
         }
     }
 
+    const onError = (errorMessage: string) => {
+        alert(`Error: ${errorMessage}`)
+    }
+
     const setActiveChatProxy = (index: number | null) => {
         setActiveChat(index);
         if (index !== null) {
@@ -216,6 +220,7 @@ const MainPage: React.FC<MainPageProps> = ({ openNewMessengerTab }) => {
             adapt_messenger_api.on_message_received = receiveMessage;
             adapt_messenger_api.on_set_user_name = onSetUserName;
             adapt_messenger_api.on_invite_code_generated = onInviteCodeGenerated;
+            adapt_messenger_api.on_error = onError;
             setTimeout(() => {
                 setAdaptMessengerApi(adapt_messenger_api);
             }, 2000);
