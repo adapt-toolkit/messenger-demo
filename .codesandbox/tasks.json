@@ -1,25 +1,16 @@
 {
-  "$schema": "https://codesandbox.io/schemas/tasks.json",
-  "setupTasks": ["/workspace/.codesandbox/setup.sh"],
-  "tasks": {
-    "rebuild-nodejs": {
-      "name": "Rebuild app on changes",
-      "command": "cd /workspace/web && export __BROKER_ADDRESS__='wss://messenger-demo.adaptframework.solutions/broker' && npm run build && npm run start",
-      "restartOn": {
-        "files": ["web/src/**/*"]
-      },
-      "runAtStart": true,
-      "preview": {
-        "port": 8080,
-        "prLink": "devtool"
-      }
-    },
-    "rebuild-mufl": {
-      "name": "Rebuild mufl code on changes",
-      "command": "cd /workspace/mufl_code/ && MUFL_STDLIB_PATH=/mufl/mufl_stdlib /mufl/bin/mufl-compile -mp /mufl/meta -mp /mufl/transactions ./actor.mu && cd /workspace/web && npm run copy-muflo",
-      "restartOn": {
-        "files": ["mufl_code/*.mu"]
+    "$schema": "https://codesandbox.io/schemas/tasks.json",
+    "setupTasks": ["/workspace/.codesandbox/setup.sh"],
+    "tasks": {
+      "rebuild-nodejs": {
+        "name": "Rebuild app on changes",
+        "command": "/workspace/.codesandbox/compile-mufl-code.sh && /workspace/.codesandbox/build-app.sh",
+        "runAtStart": true,
+        "preview": {
+          "port": 8080,
+          "prLink": "devtool"
+        }
       }
     }
   }
-}
+  
