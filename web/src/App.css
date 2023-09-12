@@ -20,7 +20,9 @@
 
 .create-chat-button,
 .connect-chat-button,
-.set-username-button {
+.set-username-button,
+.open-instructions-button,
+.close-instructions-button {
   padding: 10px 20px;
   margin: 10px;
   border: none;
@@ -280,4 +282,15 @@
   font-size: 16px;
   line-height: 1.5;
   white-space: pre-wrap;
+}
+
+.open-instructions-button {
+  position:absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #333;
+}
+
+.close-instructions-button {
+  background-color: #333;
 }

@@ -11,6 +11,7 @@ export module adapt_messenger_api {
         private __on_message_received_cb?: (chat_id: string, message: string, timestamp: string, from_id: string, from_name: string, incoming: boolean) => void;
         private __on_set_user_name_cb?: (user_name: string) => void;
         private __on_invite_code_generated?: (chat_id: string, invite: string) => void;
+        private __on_error?: (errorMessage: string) => void;
 
         constructor(public packet: adapt_wrappers.AdaptPacketWrapper) {
             packet.on_return_data = (data: adapt_js_api.AdaptValue) => {
@@ -82,7 +83,24 @@ export module adapt_messenger_api {
         }
 
         connect_to_chat = (invite: string) => {
-            const buffer = Buffer.from(pako.inflate(Buffer.from(invite, 'base64')))
+            let parsedInvite: Buffer;
+            try {
+                parsedInvite = Buffer.from(invite, 'base64')
+            } catch (e) {
+                if (this.__on_error) {
+                    this.__on_error("Invalid invite code: failed to parse from base 64");
+                }
+                return;
+            }
+            let buffer: Buffer
+            try {
+                buffer = Buffer.from(pako.inflate(parsedInvite));
+            } catch (e) {
+                if (this.__on_error) {
+                    this.__on_error("Invalid invite code: failed to decompress the data");
+                }
+                return;
+            }
             const trn = adapt_js_api_utils.object_to_adapt_value({
                 name: "::actor::join_chat",
                 targ: this.packet.packet.NewBinaryFromBuffer(buffer)
@@ -115,6 +133,11 @@ export module adapt_messenger_api {
 
         set on_invite_code_generated(on_invite_code_generated: (chat_id: string, invite: string) => void) {
             this.__on_invite_code_generated = on_invite_code_generated;
+        }
+
+        set on_error(on_error_cb: (errorMessage: string) => void) {
+            this.__on_error = on_error_cb;
+            // this.packet.on_transaction_failure = on_error_cb;
         }
 
         set_user_name = (user_name: string) => {
