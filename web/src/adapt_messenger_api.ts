@@ -137,7 +137,7 @@ export module adapt_messenger_api {
 
         set on_error(on_error_cb: (errorMessage: string) => void) {
             this.__on_error = on_error_cb;
-            this.packet.on_transaction_failure = on_error_cb;
+            // this.packet.on_transaction_failure = on_error_cb;
         }
 
         set_user_name = (user_name: string) => {
