@@ -23,7 +23,7 @@ const DemoIntroPage: React.FC<DemoIntroPageProps> = ({openNewMessengerTab}) => {
 
                     This demo is built with just under 300 lines of MUFL code. <br/>
 
-                    For full context on this demo and the framework, please see <a href="https://github.com/adapt-toolkit/messenger-demo/tree/release-0.2" target="_blank">the README file.</a>
+                    For full context on this demo and the framework, please see <a href="https://github.com/adapt-toolkit/messenger-demo" target="_blank">the README file.</a>
                     <br/><br/>
 
                     If you experience any issues, please ping us on our <a href="https://discord.gg/VjKSBS2u7H">Discord</a>.
